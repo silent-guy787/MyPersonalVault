@@ -3691,7 +3691,46 @@
         document.querySelectorAll('.nav-item').forEach(btn => {
             btn.addEventListener('click', () => switchTab(btn.dataset.tab));
         });
-        $('brandReload').addEventListener('click', () => switchTab('vault'));
+        $('brandReload').addEventListener('click', async function() {
+    const brandEl = this.querySelector('.brand-name');
+    const originalText = brandEl.textContent;
+    
+    try {
+        brandEl.textContent = '⟳ Loading...';
+        brandEl.style.opacity = '0.6';
+        
+        // Check if DB is still open
+        try {
+            await db ? db : await openDB();
+        } catch (e) {
+            // Re-open DB if closed
+            db = await openDB();
+        }
+        
+        // Reload all data
+        await loadAllData();
+        
+        // Re-render everything
+        renderEverything();
+        refreshSettingsView();
+        
+        // Update counts
+        updateVaultCount();
+        
+        brandEl.textContent = originalText;
+        brandEl.style.opacity = '1';
+        
+        // Switch to vault tab
+        switchTab('vault');
+        
+        showToast('Reloaded successfully');
+    } catch (err) {
+        console.error('Reload failed:', err);
+        brandEl.textContent = originalText;
+        brandEl.style.opacity = '1';
+        showToast('Reload failed: ' + (err.message || 'unknown error'), true);
+    }
+});
 
         document.querySelectorAll('.vault-mode-toggle .mode-btn').forEach(btn => {
             btn.addEventListener('click', function() {
