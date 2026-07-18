@@ -462,12 +462,12 @@
 
     /* ============ START OF THEME ============ */
     function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        setPref('theme', theme);
-        document.querySelectorAll('.theme-opt').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.themeOpt === theme);
-        });
-    }
+    document.documentElement.setAttribute('data-theme', theme);
+    setPref('theme', theme);
+    document.querySelectorAll('.theme-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.theme === theme);
+    });
+}
     /* ============ END OF THEME ============ */
 
     /* ============ START OF SIDEBAR ============ */
