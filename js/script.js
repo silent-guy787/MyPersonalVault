@@ -4095,8 +4095,14 @@
                 showToast('Trash emptied'); });
         });
 
-        document.querySelectorAll('.theme-opt').forEach(btn => {
-            btn.addEventListener('click', () => setTheme(btn.dataset.themeOpt));
+document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', () => setTheme(card.dataset.theme));
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setTheme(card.dataset.theme);
+                }
+            });
         });
 
         $('lockUnlockBtn').addEventListener('click', attemptUnlock);
