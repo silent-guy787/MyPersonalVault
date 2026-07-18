@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strongbox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH -->
+    <div id="splash">
+        <div class="dial-wrap">
+            <svg viewBox="0 0 96 96" fill="none">
+                <circle class="dial-ring" cx="48" cy="48" r="40"/>
+                <circle class="dial-ring" cx="48" cy="48" r="30" opacity="0.35"/>
+                <g class="dial-tick">
+                    <line x1="48" y1="8" x2="48" y2="15"/><line x1="48" y1="88" x2="48" y2="81"/>
+                    <line x1="8" y1="48" x2="15" y2="48"/><line x1="88" y1="48" x2="81" y2="48"/>
+                </g>
+                <g class="dial-needle">
+                    <line x1="48" y1="48" x2="48" y2="18" stroke="#C89A52" stroke-width="2" stroke-linecap="round"/>
+                    <circle class="dial-core" cx="48" cy="48" r="4.5"/>
+                </g>
+            </svg>
+        </div>
+        <div class="splash-word">Strongbox</div>
+        <div class="splash-sub">Personal vault &amp; ledger</div>
+    </div>
+
+    <!-- ===== NEW LOGIN SCREEN ===== -->
+    <div id="lockScreen" oncontextmenu="return false;">
+        <div class="lock-container">
+           <!-- LEFT: Login Form -->
+<div class="lock-left">
+    <div class="lock-brand-login">
+        <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="6" fill="var(--accent)"/><circle cx="16" cy="15" r="5.4" fill="none" stroke="#fff" stroke-width="1.6"/><line x1="16" y1="15" x2="16" y2="11.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><line x1="16" y1="15" x2="18.6" y2="16.6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><rect x="12.5" y="23" width="7" height="2.4" rx="1.2" fill="#fff" opacity="0.85"/></svg>
+        Strongbox
+    </div>
+    <div class="lock-sub-login">Personal vault</div>
+    <div class="lock-label-login" id="lockScreenLabel">Sign in to your vault</div>
+
+                <div class="lock-input-group">
+    <div class="lock-input-wrap">
+        <div class="lock-input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M4 10h16"/><path d="M8 14h3"/></svg>
+        </div>
+        <input type="email" id="lockEmailInput" placeholder="Email address" autocomplete="email" autofocus>
+    </div>
+    <div class="lock-input-wrap">
+        <div class="lock-input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+        </div>
+        <input type="password" id="lockPasswordInput" placeholder="Password" autocomplete="current-password" oncontextmenu="return false;" onselectstart="return false;">
+        <button class="lock-toggle-vis" id="lockToggleVis" type="button" title="Show/hide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+    </div>
+</div>
+
+                <div class="lock-error" id="lockError"></div>
+                <button class="lock-btn" id="lockUnlockBtn">Sign In</button>
+
+                <div class="lock-hint">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+                    Your data is encrypted and stored locally on this device.
+                </div>
+            </div>
+
+            <!-- RIGHT: SVG + Text -->
+            <div class="lock-right">
+                <div class="lock-svg-top">Organized &amp; Safe in your Hands</div>
+                <div class="lock-svg-wrap">
+                    <svg fill="#000000" viewBox="-180 0 630 630" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                        <g id="tree" transform="matrix(1.27,0,0,1.27,-17.4,-16.43)">
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M167.628,98.327L128.96,97.079L110.293,68.08L88.96,103.413L28.96,98.746L62.293,78.746L40.293,39.413L59.96,24.41L120.96,18.08L140.96,54.08L168.293,56.746L167.628,98.327Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M205.962,85.41L203.962,117.41L216.125,128.618L202.628,132.034L198.962,153.618L164.375,152.618L144.875,109.868L166.625,84.118L163.378,42.329L177.962,43.077L187.962,75.077L205.962,85.41Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M166.125,27.618L157.476,30.979L151.857,33.164L124.627,43.747L116.627,66.081L147.627,56.081L166.459,69.747L166.125,27.618Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M108.319,68.077L117.653,59.744L110.486,55.077L110.986,43.744L93.236,47.827L90.653,59.411L108.319,68.077Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M92.736,114.827L56.96,126.747L10.96,118.747L24.96,110.08L15.294,97.077L15.627,84.747L49.44,70.064L50.294,53.41L66.293,62.747L92.736,114.827Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M161.293,61.035L164.122,84.413L176.457,81.702L162.457,102.369L194.457,112.369L199.206,102.913L189.123,95.702L209.123,85.702L207.206,73.913L189.79,72.369L184.457,41.702L161.293,61.035Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M82.627,56.412L122.293,71.412L142.293,71.079L156.293,101.745L46.96,108.079L52.819,83.575L93.486,77.577L95.293,72.412L82.627,56.412Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M108.628,286.744L60.294,320.077L38.294,309.411L43.961,305.077L22.961,295.077L21.961,284.077L55.294,264.411" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M76.963,280.744L114.296,335.411L112.82,352.41L58.963,283.411L76.963,280.744Z" style="fill:rgb(163,131,95);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M61.878,287.41L81.878,287.66L112.167,332.332L117.417,343L61.878,287.41Z" style="fill:rgb(122,92,62);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M34.963,253.411L52.963,287.411L116.296,289.411L104.963,244.744L84.963,239.411L34.963,253.411Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M90.295,237.411L58.962,258.744L28.128,261.41L27.404,253.256L12.962,250.744L12.628,244.91L26.962,242.077L17.629,216.744L68.295,194.744L90.295,237.411Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M160.628,269.077L121.628,284.41L105.628,261.743L123.961,255.41L129.628,264.41L153.628,253.743L160.628,269.077Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M87.629,284.077L150.296,257.743L139.629,212.41L95.629,241.411L114.295,251.411L87.795,267.912L90.128,276.246L87.629,284.077Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M174.295,222.41L130.962,229.076L112.295,200.077L90.962,235.41L30.962,230.743L64.295,210.743L42.295,171.41L122.962,150.077L142.962,186.077L170.295,188.743L174.295,222.41Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M163.794,284.245L206.877,285.615L190.128,264.031L218.127,260.615L204.128,228.031L168.127,159.615L168.627,216.115L146.877,241.865L163.794,284.245Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M117.877,361.448L145.877,338.665L179.627,215.948L186.127,207.448L152.417,342.126L117.127,377.448L117.877,361.448Z" style="fill:rgb(163,131,95);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M113.5,180.619L111.142,267.332L112.73,368.027L110.273,461.75L109.394,509L127.696,509L124.678,441.702L121.139,353.585L124.952,282.323L122.215,175.47L113.5,180.619Z" style="fill:rgb(163,131,95);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M112.334,382.125L109.918,483.335L121.917,372.667" style="fill:rgb(194,161,121);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M121.5,347.063L112.156,337.782L111.167,270.501L124.672,266.267L124.916,288.418L121.5,347.063Z" style="fill:rgb(122,92,62);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M160.712,266.032L198.961,268.578L196.165,260.189L188.382,257.045L185.378,248.032L163.378,246.032L172.463,232.413L157.63,217.912L132.712,244.699L160.712,266.032Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M168.461,193.032L168.461,217.032L179.961,213.412L166.461,234.366L200.794,242.078L197.794,234.912L193.127,227.699L213.127,217.699L212.127,209.412L193.794,204.366L188.461,173.699L168.461,193.032Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M168.127,159.615L126.629,175.744L118.629,198.078L149.629,188.078L168.461,201.744L168.127,159.615Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M84.629,188.409L124.295,203.409L144.295,203.076L158.295,239.246L48.962,245.58L68.295,223.742L93.629,222.742L97.295,204.409L84.629,188.409Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M108.5,275.417L125.141,268.328L124.083,240.752L109.961,239.913L82.961,227.913L80.962,233.077L108.5,275.417Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M78.296,257.077L108.962,255.077L105.629,271.41L67.629,271.41L78.296,257.077Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M109.918,170.597L113.045,179.999L94.354,180.035L94.128,170.576L109.918,170.597Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M128.443,236.099L131.045,259.999L112.353,260.035L112.653,236.078L128.443,236.099Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M196.125,184.411L176.294,219.578L114.792,220.411L126.125,175.744L146.125,170.411L196.125,184.411Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M140.793,168.411L172.126,189.744L218.126,181.744L204.126,173.077L200.628,155.41L213.459,147.744L162.793,125.744L140.793,168.411Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M143.459,215.077L139.46,221.246L80.792,188.743L91.459,143.41L135.459,172.411L116.793,182.411L143.459,215.077Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M64.711,215.615L24.211,216.615L40.96,195.031L12.961,191.615L26.96,159.031L55.462,105.243L55.629,98.577L62.961,97.949L62.461,147.115L84.211,172.865L64.711,215.615Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M70.376,197.032L29.878,200.16L30.378,192.91L42.537,188.553L45.71,179.032L67.71,177.032L58.625,163.413L73.458,148.912L97.795,178.41L86.462,178.743L86.462,191.41L70.376,197.032Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M62.627,124.032L62.962,147.41L68.486,154.577L64.627,165.366L32.627,175.366L27.878,165.91L37.961,158.699L17.961,148.699L19.878,136.91L37.294,135.366L42.627,104.699L62.627,124.032Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M123.792,206.077L105.126,198.077L109.792,171.743L150.126,164.077L123.792,206.077Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M79.128,214.577L50.294,224.078L54.961,239.078L96.628,222.577L79.128,214.577Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M56.793,153.41L100.126,160.076L118.793,131.077L140.126,166.41L200.126,161.743L166.793,141.743L188.793,102.41L108.126,81.077L88.126,117.077L63.319,125.077L56.793,153.41Z" style="fill:rgb(107,143,111);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M59.986,108.327L71.61,93.976L96.986,106.577L104.459,106.744L112.459,129.078L81.459,119.078L67.986,133.077L59.986,108.327Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M146.459,119.409L106.793,134.409L86.793,134.076L72.793,164.742L182.126,171.076L162.793,154.742L137.459,153.742L133.793,135.409L146.459,119.409Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M49.976,127.935L50.109,137.843L67.775,131.742L64.884,122.733L49.976,127.935Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M67.986,82.077L61.486,65.077L70.486,65.577L80.486,79.577L67.986,82.077Z" style="fill:rgb(74,107,82);fill-rule:nonzero;"/>
+                            </g>
+                            <g transform="matrix(1,0,0,1,2.74049,0)">
+                                <path d="M139.986,153.077L156.486,153.577L157.986,142.577L148.986,131.077L139.986,153.077Z" style="fill:rgb(143,176,143);fill-rule:nonzero;"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="lock-svg-bottom">
+                    Please log in using your email and password. Note that this web application is a private project intended strictly for personal use. Account registration is disabled, as the system is restricted to a single, authorized user. Thank you.
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- APP -->
+    <div id="app" class="unlocked">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="mobile-sidebar-backdrop" id="mobileSidebarBackdrop"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top-row">
+                <button class="brand-btn" id="brandReload" title="Strongbox">
+                    <div class="brand">
+                        <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="6" fill="var(--accent)"/><circle cx="16" cy="15" r="5.4" fill="none" stroke="#fff" stroke-width="1.6"/><line x1="16" y1="15" x2="16" y2="11.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><line x1="16" y1="15" x2="18.6" y2="16.6" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><rect x="12.5" y="23" width="7" height="2.4" rx="1.2" fill="#fff" opacity="0.85"/></svg>
+                        <div><div class="brand-name">Strongbox</div><div class="brand-tag">Personal ledger</div></div>
+                    </div>
+                </button>
+                <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" data-label="Expand sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M8,5 L3,5 L3,19 L8,19 L8,5 Z M10,5 L10,19 L21,19 L21,5 L10,5 Z M2.818,3 L21.181,3 C22.185,3 23,3.895 23,5 L23,19 C23,20.104 22.185,21 21.181,21 L2.818,21 C1.814,21 1,20.104 1,19 L1,5 C1,3.895 1.814,3 2.818,3 Z"/></svg>
+                </button>
+            </div>
+
+            <nav class="nav-main">
+                <button class="nav-item active" data-tab="vault" data-label="Vault">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/><circle cx="12" cy="15" r="1.6"/></svg>
+                    <span>Vault</span>
+                </button>
+                <button class="nav-item" data-tab="goals" data-label="Goals">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg>
+                    <span>Goals</span>
+                </button>
+                <button class="nav-item" data-tab="notepad" data-label="Notepad">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+                    <span>Notepad</span>
+                </button>
+                <button class="nav-item trash-item" data-tab="trash" data-label="Trash">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    <span>Trash</span>
+                </button>
+
+                <div style="border-top:1px solid var(--border);margin:6px 0;"></div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:8px 12px 4px;font-weight:600;">Other Tools</div>
+
+                <button class="nav-item" data-tab="qr" data-label="QR Generator">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="14" x2="21" y2="14"/></svg>
+                    <span>QR Generator</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-spacer"></div>
+            <div class="sidebar-foot">
+                <button class="nav-item" data-tab="settings" id="settingsBtn" data-label="Settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span>Settings</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="content">
+
+            <!-- VAULT -->
+            <section class="view active" id="vaultView">
+                <div class="view-header">
+                    <div><h1 class="view-title">Vault</h1><div class="view-count" id="vaultCount">0 entries</div></div>
+                    <div class="view-actions">
+                      
+                        <div class="goal-filter-wrap" id="vaultFilterWrap">
+                            <button class="btn btn-ghost" id="vaultFilterBtn" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                                <span id="vaultFilterLabel">All</span>
+                            </button>
+                            <div class="filter-menu" id="vaultFilterMenu"></div>
+                        </div>
+                        <input type="text" class="search-input" id="vaultSearch" placeholder="Search…" style="background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 stroke=%22%238A8F99%22 stroke-width=%221.8%22 viewBox=%220 0 24 24%22><circle cx=%2211%22 cy=%2211%22 r=%227%22/><line x1=%2221%22 y1=%2221%22 x2=%2216.6%22 y2=%2216.6%22/></svg>');">
+                        <div id="vaultActionButtons">
+                            <button class="btn btn-ghost" id="exportVaultBtn" title="Export passwords as CSV">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Export
+                            </button>
+                            <button class="btn btn-ghost" id="importVaultBtn" title="Import passwords from CSV">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Import
+                            </button>
+                            <input type="file" id="importVaultFile" accept=".csv,text/csv" style="display:none;">
+                            <button class="btn btn-primary" id="newVaultBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <span id="newVaultBtnLabel">New entry</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="recoveryBanner"></div>
+
+                <!-- Password Modal -->
+                <div class="inline-panel" id="vaultModalOverlay">
+                    <div class="modal-head">
+                        <div><h2 id="vaultModalTitle">New entry</h2><p>Store credentials, PINs and secure notes.</p></div>
+                        <button class="modal-close" id="vaultModalClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-grid2">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="fName" placeholder="e.g. GitHub or https://example.com">
+                                <div id="urlDetectionHint" style="font-size:11px;color:var(--muted);margin-top:4px;min-height:18px;"></div>
+                            </div>
+                            <div class="form-group"><label>Username / Email <span style="text-transform:none;font-weight:400;">(optional)</span></label><input type="text" id="fUsername" placeholder="Optional"></div>
+                        </div>
+                        <div class="form-group mono">
+                            <label>Password or PIN</label>
+                            <div class="input-with-btn">
+                                <input type="password" id="fSecret" placeholder="Enter your password or PIN. Please ensure it is up to date.">
+                                <div class="in-actions">
+                                    <button type="button" class="mini-icon-btn eye-toggle" data-target="fSecret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                    <button type="button" class="mini-icon-btn" id="passwordSuggestBtn" title="Password suggestions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="icon-color-label-row"><label style="margin:0;">Icon color</label><span class="icon-color-current-label" id="fColorCurrentLabel">Default</span></div>
+                            <div class="icon-color-row" id="fColorRow">
+                                <button type="button" class="icon-color-swatch" data-color-value="none" title="No icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="20" y2="20"/></svg></button>
+                                <button type="button" class="icon-color-swatch selected" data-color-value="default" title="Default (outline)"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#E5484D" style="background:#E5484D" title="Red"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#F5A524" style="background:#F5A524" title="Orange"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#E8C547" style="background:#E8C547" title="Yellow"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#3DBE6C" style="background:#3DBE6C" title="Green"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#2AB6C4" style="background:#2AB6C4" title="Teal"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#3B82F6" style="background:#3B82F6" title="Blue"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#8B5CF6" style="background:#8B5CF6" title="Purple"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#EC4899" style="background:#EC4899" title="Pink"></button>
+                                <button type="button" class="icon-color-swatch" data-color-value="#8A8F99" style="background:#8A8F99" title="Gray"></button>
+                                <button type="button" class="icon-color-swatch custom-swatch" id="fColorCustomBtn" title="Custom color"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.2-.8-.4-1.1-.2-.3-.4-.6-.4-1 0-.8.7-1.4 1.5-1.4H16c3.3 0 6-2.7 6-6 0-4.4-4.5-8-10-8Z"/></svg></button>
+                                <input type="color" id="fColorCustomInput" value="#5B8DEF" style="width:0;height:0;padding:0;border:0;opacity:0;position:absolute;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="vCategory"></select>
+                            <div class="new-category-row" id="newVaultCategoryRow" style="display:none;">
+                                <input type="text" id="vNewCategoryInput" placeholder="New category name…">
+                                <button type="button" class="btn btn-ghost btn-sm" id="vNewCategoryConfirm">Add</button>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Description</label><textarea id="fDesc" placeholder="Notes, recovery hints, URL…"></textarea></div>
+                    </div>
+                    <div class="modal-foot">
+                        <button class="btn btn-ghost" id="vaultModalCancel">Cancel</button>
+                        <button class="btn btn-primary" id="vaultModalSave">Save entry</button>
+                    </div>
+                </div>
+
+                <!-- Password Suggestions Modal -->
+                <div class="inline-panel" id="passwordSuggestModal">
+                    <div class="modal-head">
+                        <div><h2>Password & PIN Suggestions</h2><p>Click any password or PIN to use it.</p></div>
+                        <button class="modal-close" id="passwordSuggestClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                    </div>
+                    <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+                        <div class="suggest-grid" id="passwordSuggestGrid"></div>
+                    </div>
+                    <div class="modal-foot">
+                        <button class="btn btn-ghost" id="passwordSuggestCancel">Close</button>
+                    </div>
+                </div>
+
+          
+
+              <!-- VAULT LIST CONTAINER -->
+                <div id="vaultListContainer">
+                    <div class="entry-list" id="vaultList"></div>
+                </div>
+            </section>
+
+            <!-- GOALS -->
+            <section class="view" id="goalsView">
+                <div class="view-header">
+                    <div><h1 class="view-title">Goals</h1><div class="view-count" id="goalsCount">0 goals</div></div>
+                    <div class="view-actions">
+                        <div class="goal-filter-wrap">
+                            <button class="btn btn-ghost" id="goalsFilterBtn" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                                <span id="goalsFilterLabel">All</span>
+                            </button>
+                            <div class="filter-menu" id="goalsFilterMenu"></div>
+                        </div>
+                        <input type="text" class="search-input" id="goalsSearch" placeholder="Search goals…" style="background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 stroke=%22%238A8F99%22 stroke-width=%221.8%22 viewBox=%220 0 24 24%22><circle cx=%2211%22 cy=%2211%22 r=%227%22/><line x1=%2221%22 y1=%2221%22 x2=%2216.6%22 y2=%2216.6%22/></svg>');">
+                        <button class="btn btn-primary" id="newGoalBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            New goal
+                        </button>
+                    </div>
+                </div>
+                <div class="inline-panel" id="goalModalOverlay">
+                    <div class="modal-head">
+                        <div><h2 id="goalModalTitle">New goal</h2><p>Track something you're working towards.</p></div>
+                        <button class="modal-close" id="goalModalClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>Name</label><input type="text" id="gName" placeholder="e.g. Save $5,000"></div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="gCategory"></select>
+                            <div class="new-category-row" id="newCategoryRow" style="display:none;">
+                                <input type="text" id="gNewCategoryInput" placeholder="New category name…">
+                                <button type="button" class="btn btn-ghost btn-sm" id="gNewCategoryConfirm">Add</button>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Description</label><textarea id="gDesc" placeholder="Notes about this goal…"></textarea></div>
+                    </div>
+                    <div class="modal-foot">
+                        <button class="btn btn-ghost" id="goalModalCancel">Cancel</button>
+                        <button class="btn btn-primary" id="goalModalSave">Save goal</button>
+                    </div>
+                </div>
+                <div class="entry-list" id="goalsList"></div>
+            </section>
+
+            <!-- NOTEPAD -->
+            <section class="view" id="notepadView">
+                <div class="view-header">
+                    <div><h1 class="view-title">Notepad</h1><div class="view-count" id="notepadCount">0 notes</div></div>
+                </div>
+                <div class="mobile-note-tabs" id="mobileNoteTabs">
+                    <button class="mnt-btn active" data-panel="folders">Folders</button>
+                    <button class="mnt-btn" data-panel="notes">Notes</button>
+                    <button class="mnt-btn" data-panel="editor">Editor</button>
+                </div>
+                <div class="notepad-container">
+                    <div class="notepad-panel panel-folders mobile-active">
+                        <div class="panel-header">
+                            <h3>Folders</h3>
+                            <div class="pill-entry">
+                                <input type="text" id="newFolderInput" placeholder="New folder name…" maxlength="60">
+                                <button class="pill-add-btn" id="addFolderBtn" title="Add folder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-content" id="folderList"></div>
+                    </div>
+                    <div class="notepad-panel panel-notes">
+                        <div class="panel-header">
+                            <h3>Notes</h3>
+                            <div class="pill-entry">
+                                <input type="text" id="newNoteInput" placeholder="New note title…" maxlength="80">
+                                <button class="pill-add-btn" id="addNoteBtn" title="Add note">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-content" id="noteList"></div>
+                    </div>
+                    <div class="notepad-panel panel-editor">
+                        <div class="editor-toolbar" id="editorToolbar">
+                            <button class="tb-btn" data-cmd="bold" title="Bold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h7a3.5 3.5 0 0 1 0 7H6z"/><path d="M6 11h8a3.5 3.5 0 0 1 0 7H6z"/></svg></button>
+                            <button class="tb-btn" data-cmd="italic" title="Italic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg></button>
+                            <button class="tb-btn" data-cmd="underline" title="Underline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8a6 6 0 0 0 12 0V3"/><line x1="4" y1="21" x2="20" y2="21"/></svg></button>
+                            <button class="tb-btn" data-cmd="strikeThrough" title="Strikethrough"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><path d="M16 6.5C15.3 5 13.8 4 12 4c-2.4 0-4.3 1.6-4.3 3.6 0 1.6 1 2.6 2.6 3.1"/><path d="M8 17.5c.7 1.5 2.2 2.5 4 2.5 2.4 0 4.3-1.6 4.3-3.6 0-.4-.1-.8-.2-1.1"/></svg></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" id="tbSizeDown" title="Decrease text size"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V9a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3v9"/><line x1="4" y1="14" x2="11" y2="14"/><line x1="14" y1="15" x2="22" y2="15"/></svg></button>
+                            <button class="tb-btn" id="tbSizeUp" title="Increase text size"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V9a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3v9"/><line x1="4" y1="14" x2="11" y2="14"/><line x1="18" y1="10" x2="18" y2="20"/><line x1="14" y1="15" x2="22" y2="15"/></svg></button>
+                            <div class="tb-sep"></div>
+                            <label class="tb-btn" title="Text color" style="position:relative;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16 10 4l5 12"/><line x1="6.5" y1="12" x2="13.5" y2="12"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+                                <input type="color" id="tbTextColor" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+                            </label>
+                            <label class="tb-btn" title="Highlight" style="position:relative;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 15 16.5 3.5 20.5 5.5 15 17"/><path d="M11 15l-3 6-4-2 2-5"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
+                                <input type="color" id="tbHighlight" value="#fdf08c" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+                            </label>
+                            <button class="tb-btn" id="tbClear" title="Remove formatting"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/><line x1="4" y1="4" x2="20" y2="20" stroke="var(--bad)"/></svg></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" data-cmd="insertUnorderedList" title="Bullet list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="1"/><line x1="9" y1="6" x2="20" y2="6"/><circle cx="5" cy="12" r="1"/><line x1="9" y1="12" x2="20" y2="12"/><circle cx="5" cy="18" r="1"/><line x1="9" y1="18" x2="20" y2="18"/></svg></button>
+                            <button class="tb-btn" data-cmd="insertOrderedList" title="Numbered list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h1v3"/><line x1="9" y1="6" x2="20" y2="6"/><path d="M4 14h2l-2 2h2"/><line x1="9" y1="12" x2="20" y2="12"/><path d="M4 21h2c0-1 0-1.5-1-2s-1-1 0-2h-1"/><line x1="9" y1="18" x2="20" y2="18"/></svg></button>
+                            <div class="tb-sep"></div>
+                            <button class="tb-btn" id="tbCheckbox" title="Checklist item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l1.5 1.5L8 5"/><line x1="11" y1="6" x2="20" y2="6"/><path d="M4 12l1.5 1.5L8 11"/><line x1="11" y1="12" x2="20" y2="12"/><path d="M4 18l1.5 1.5L8 17"/><line x1="11" y1="18" x2="20" y2="18"/></svg></button>
+                        </div>
+                        <div class="note-editor-wrap">
+                            <input type="text" class="note-title-input" id="noteTitleInput" placeholder="Note title…">
+                            <div class="note-editor" id="noteEditor" contenteditable="false" data-empty="true" data-placeholder="Select or create a note to start writing…"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRASH -->
+            <section class="view" id="trashView">
+                <div class="view-header">
+                    <div><h1 class="view-title">Trash</h1><div class="view-count" id="trashCount">0 items</div></div>
+                    <div class="view-actions">
+                        <button class="btn btn-ghost" id="emptyTrashBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Empty trash
+                        </button>
+                    </div>
+                </div>
+                <p class="view-sub" style="margin-bottom:18px;">Items are permanently deleted 30 days after being moved here.</p>
+                <div class="entry-list" id="trashList"></div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section class="view" id="settingsView">
+                <div class="view-header"><div><h1 class="view-title">Settings</h1></div></div>
+
+                <div class="settings-card">
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/></svg>Appearance</h3>
+                    <p class="settings-desc">Choose how Strongbox looks on this device.</p>
+                    <div class="theme-toggle">
+                        <button class="theme-opt" data-theme-opt="light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Light</button>
+                        <button class="theme-opt" data-theme-opt="dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>Dark</button>
+                        <button class="theme-opt" data-theme-opt="dark2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" opacity="0.3"/></svg>Dark 2</button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Lock screen &amp; security</h3>
+                    <p class="settings-desc">Protect Strongbox with a PIN or password. This also encrypts your data.</p>
+                    <div class="row-between">
+    <div id="lockToggleLabel">Lock screen is <strong id="lockStateWord">off</strong></div>
+    <label class="switch"><input type="checkbox" id="lockToggle"><span class="slider"></span></label>
+</div>
+
+<!-- Panic Lock Mode -->
+<div style="border-top:1px solid var(--border-soft);margin:16px 0 12px;"></div>
+<div class="row-between">
+    <div>
+        <div style="font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--bad);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Panic Lock Mode
+        </div>
+        <div class="panic-indicator">
+            <span>Double-press </span>
+            <span class="key-combo"><kbd>Esc</kbd></span>
+            <span> to immediately lock the app</span>
+        </div>
+    </div>
+    <label class="switch"><input type="checkbox" id="panicLockToggle"><span class="slider"></span></label>
+</div>
+                    <div id="lockSetSection" style="display:none;" class="inline-form">
+                        <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Set your PIN or password</div>
+                        <div class="form-group mono">
+                            <label>New password / PIN</label>
+                            <div class="input-with-btn">
+                                <input type="password" id="lockSetPassword" autocomplete="off">
+                                <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="lockSetPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                            </div>
+                        </div>
+                        <div class="form-group mono">
+                            <label>Confirm password / PIN</label>
+                            <div class="input-with-btn">
+                                <input type="password" id="lockConfirmPassword" autocomplete="off">
+                                <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="lockConfirmPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                            </div>
+                        </div>
+                        <div id="lockPasswordFeedback"></div>
+                        <div class="settings-actions"><button class="btn btn-primary btn-sm" id="lockSavePasswordBtn">Save &amp; enable</button></div>
+                    </div>
+
+                    <div id="lockManageSection" style="display:none;">
+                        <div class="settings-actions">
+                            <button class="btn btn-ghost btn-sm" id="openChangePassBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3-3.5 3.5Z"/></svg>
+                                Change password
+                            </button>
+                            <button class="btn btn-ghost btn-sm" id="openResetLockBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                                <span id="openResetLockBtnLabel">Reset lock screen</span>
+                            </button>
+                        </div>
+
+                        <div id="changePassForm" style="display:none;" class="inline-form">
+                            <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3-3.5 3.5Z"/></svg>Change password / PIN</div>
+                            <div class="form-group mono"><label>Current password / PIN</label>
+                                <div class="input-with-btn"><input type="password" id="changeOldPassword" autocomplete="off">
+                                    <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="changeOldPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                                </div>
+                            </div>
+                            <div class="form-group mono"><label>New password / PIN</label>
+                                <div class="input-with-btn"><input type="password" id="changeNewPassword" autocomplete="off">
+                                    <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="changeNewPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                                </div>
+                            </div>
+                            <div class="form-group mono"><label>Confirm new password / PIN</label>
+                                <div class="input-with-btn"><input type="password" id="changeConfirmPassword" autocomplete="off">
+                                    <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="changeConfirmPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                                </div>
+                            </div>
+                            <div id="changePassFeedback"></div>
+                            <div class="settings-actions">
+                                <button class="btn btn-primary btn-sm" id="submitChangePassBtn">Update password</button>
+                                <button class="btn btn-ghost btn-sm" id="cancelChangePassBtn">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div id="resetLockForm" style="display:none;" class="inline-form">
+                            <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg><span id="resetLockFormTitle">Reset lock screen</span></div>
+                            <p class="settings-desc" style="margin:0;" id="resetLockFormDesc">This permanently erases your saved PIN/password. Your vault entries are kept, but you'll need to set a brand new password if you want to re-enable the lock later.</p>
+                            <div class="form-group mono"><label>Current password / PIN</label>
+                                <div class="input-with-btn"><input type="password" id="resetCurrentPassword" autocomplete="off">
+                                    <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="resetCurrentPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                                </div>
+                            </div>
+                            <div id="resetLockFeedback"></div>
+                            <div class="settings-actions">
+                                <button class="btn btn-danger btn-sm" id="submitResetLockBtn">Confirm reset</button>
+                                <button class="btn btn-ghost btn-sm" id="cancelResetLockBtn">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div id="lockOffForm" style="display:none;" class="inline-form">
+                            <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Turn off lock screen</div>
+                            <p class="settings-desc" style="margin:0;">Your PIN/password stays saved, so you can switch the lock back on later without setting it up again. Enter your current password to confirm.</p>
+                            <div class="form-group mono"><label>Current password / PIN</label>
+                                <div class="input-with-btn"><input type="password" id="lockOffCurrentPassword" autocomplete="off">
+                                    <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="lockOffCurrentPassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                                </div>
+                            </div>
+                            <div id="lockOffFeedback"></div>
+                            <div class="settings-actions">
+                                <button class="btn btn-primary btn-sm" id="submitLockOffBtn">Turn off</button>
+                                <button class="btn btn-ghost btn-sm" id="cancelLockOffBtn">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div id="lockReenableForm" style="display:none;" class="inline-form">
+                            <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Turn lock screen back on</div>
+                            <p class="settings-desc" style="margin:0;">Enter your saved password to re-enable the lock screen and re-encrypt your data.</p>
+                            <div class="form-group mono"><label>Password / PIN</label>
+                                <div class="input-with-btn"><input type="password" id="lockReenablePassword" autocomplete="off">
+                                    <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="lockReenablePassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                                </div>
+                            </div>
+                            <div id="lockReenableFeedback"></div>
+                            <div class="settings-actions">
+                                <button class="btn btn-primary btn-sm" id="submitLockReenableBtn">Turn on</button>
+                                <button class="btn btn-ghost btn-sm" id="cancelLockReenableBtn">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div class="row-between" style="margin-top:16px;">
+                            <label style="font-size:12.5px;color:var(--ink-soft);">Auto-lock after inactivity</label>
+                            <select class="select-input" id="autoLockSelect">
+                                <option value="1">1 minute</option>
+                                <option value="5">5 minutes</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Encryption</h3>
+                    <p class="settings-desc">Every vault item, goal, folder and note is encrypted at rest using AES-256-GCM, with a key derived from your password via PBKDF2.</p>
+                    <div class="row-between" style="margin-bottom:12px;">
+                        <span style="font-size:13px;color:var(--ink-soft);">Status</span>
+                        <span class="status-pill" id="encryptionStatusPill"></span>
+                    </div>
+                    <div class="kv-list">
+                        <div><span>Key derivation</span><strong>PBKDF2-SHA256, 210,000 rounds</strong></div>
+                        <div><span>Cipher</span><strong>AES-256-GCM</strong></div>
+                        <div><span>Search</span><strong>Encrypted local index</strong></div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Backup &amp; Restore</h3>
+                    <p class="settings-desc">Download all your vault items, goals, folders and notes as a JSON file, or restore from a previous backup.</p>
+                    <div class="settings-actions">
+                        <button class="btn btn-secondary btn-sm" id="backupDataBtn">Backup data</button>
+                        <button class="btn btn-secondary btn-sm" id="restoreDataBtn">Restore data</button>
+                        <input type="file" id="restoreFileInput" accept="application/json" style="display:none;">
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Session</h3>
+                    <div class="kv-list" id="sessionInfo"></div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--bad);"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>Factory Reset</h3>
+                    <p class="settings-desc">Permanently erases every vault item, goal, folder, note, and setting on this device. This cannot be undone. Consider taking a backup first.</p>
+                    <div class="settings-actions">
+                        <button class="btn btn-danger btn-sm" id="openFactoryResetBtn">Factory reset app</button>
+                    </div>
+                    <div class="settings-actions" id="factoryResetConfirm" style="display:none; flex-direction:column; align-items:stretch; gap:10px; margin-top:12px;">
+                        <p class="settings-desc" style="margin:0;">Type <strong>DELETE</strong> below to confirm you want to erase all data.</p>
+                        <input type="text" id="factoryResetConfirmInput" placeholder="Type DELETE to confirm" autocomplete="off">
+                        <div class="settings-actions">
+                            <button class="btn btn-danger btn-sm" id="submitFactoryResetBtn">Erase everything</button>
+                            <button class="btn btn-secondary btn-sm" id="cancelFactoryResetBtn">Cancel</button>
+                        </div>
+                        <div id="factoryResetFeedback"></div>
+                    </div>
+                </div>
+            </section>
+
+        <!-- QR CODE GENERATOR -->
+        <section class="view" id="qrView">
+            <div class="view-header">
+                <div><h1 class="view-title">QR Code Generator</h1><div class="view-sub">Create custom QR codes for any purpose</div></div>
+            </div>
+
+            <div class="qr-container">
+                <div class="qr-left">
+                    <div class="settings-card" id="qrContentCard">
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M4 17v3h16v-3"/><path d="M8 7v10"/><path d="M16 7v10"/><path d="M12 7v10"/></svg>Content</h3>
+    <div class="form-group">
+        <label>Enter text or data to encode</label>
+        <textarea id="qrTextInput" rows="3" placeholder="Type anything you want to convert to a QR code..."></textarea>
+    </div>
+</div>
+
+                    <div class="settings-card">
+                        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Colors</h3>
+                        <div class="qr-color-row">
+                            <div class="qr-color-group">
+                                <label>Foreground</label>
+                                <div class="qr-color-options" id="qrFgColors">
+                                    <button class="qr-color-swatch selected" data-color="#000000" style="background:#000000;"></button>
+                                    <button class="qr-color-swatch" data-color="#1a1a1a" style="background:#1a1a1a;"></button>
+                                    <button class="qr-color-swatch" data-color="#2d2d2d" style="background:#2d2d2d;"></button>
+                                    <button class="qr-color-swatch" data-color="#c41e3a" style="background:#c41e3a;"></button>
+                                    <button class="qr-color-swatch" data-color="#2e7d32" style="background:#2e7d32;"></button>
+                                    <button class="qr-color-swatch" data-color="#1565c0" style="background:#1565c0;"></button>
+                                    <button class="qr-color-swatch" data-color="#6a1b9a" style="background:#6a1b9a;"></button>
+                                    <button class="qr-color-swatch" data-color="#e65100" style="background:#e65100;"></button>
+                                    <button class="qr-color-swatch custom-color-swatch" id="qrFgCustom" title="Custom color">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+                                    </button>
+                                    <input type="color" id="qrFgColorPicker" style="display:none;">
+                                </div>
+                            </div>
+                            <div class="qr-color-group">
+                                <label>Background</label>
+                                <div class="qr-color-options" id="qrBgColors">
+                                    <button class="qr-color-swatch selected" data-color="#ffffff" style="background:#ffffff;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#f5f5f5" style="background:#f5f5f5;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#e8e8e8" style="background:#e8e8e8;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#fff3e0" style="background:#fff3e0;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#e8f5e9" style="background:#e8f5e9;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#e3f2fd" style="background:#e3f2fd;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#f3e5f5" style="background:#f3e5f5;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch" data-color="#fff8e1" style="background:#fff8e1;border-color:#ddd;"></button>
+                                    <button class="qr-color-swatch custom-color-swatch" id="qrBgCustom" title="Custom color">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+                                    </button>
+                                    <input type="color" id="qrBgColorPicker" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Logo Image</h3>
+                        <p class="settings-desc">Upload an image to place in the center of your QR code.</p>
+                        <div class="qr-logo-upload">
+                            <input type="file" id="qrLogoInput" accept="image/*" style="display:none;">
+                            <button class="btn btn-ghost btn-sm" id="qrLogoUploadBtn">Upload Image</button>
+                            <button class="btn btn-ghost btn-sm" id="qrLogoClearBtn" disabled>Clear Image</button>
+                        </div>
+                        <div id="qrLogoPreview" style="display:none;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:var(--radius-s);background:var(--surface-2);">
+                            <img id="qrLogoPreviewImg" alt="Logo preview" style="max-height:60px;max-width:100%;display:block;">
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>Size</h3>
+                        <div class="form-group">
+                            <label>QR Code Size (pixels)</label>
+                            <div style="display:flex;gap:10px;align-items:center;">
+                                <input type="range" id="qrSize" min="150" max="600" value="300" step="10" style="flex:1;">
+                                <span id="qrSizeLabel" style="font-family:var(--font-mono);font-size:14px;min-width:50px;">300</span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:8px;">
+                            <label>Error Correction</label>
+                            <select id="qrErrorCorrection">
+                                <option value="L">Low (7%)</option>
+                                <option value="M" selected>Medium (15%)</option>
+                                <option value="Q">Quartile (25%)</option>
+                                <option value="H">High (30%)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="qr-right">
+                    <div class="settings-card" style="text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                        <h3 style="margin-bottom:16px;">QR Code Preview</h3>
+                        <div id="qrPreviewContainer" style="background:var(--surface-2);border-radius:var(--radius-m);padding:20px;display:inline-block;border:1px solid var(--border);">
+                            <div id="qrCanvasWrapper" style="position:relative;display:inline-block;">
+                                <canvas id="qrCanvas"></canvas>
+                            </div>
+                        </div>
+                        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+                            <button class="btn btn-primary btn-sm" id="qrDownloadPng">Download PNG</button>
+                            <button class="btn btn-primary btn-sm" id="qrDownloadJpg">Download JPG</button>
+                            <button class="btn btn-primary btn-sm" id="qrDownloadSvg">Download SVG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        </main>
+    </div>
+
+    <div id="sbTooltip" class="sb-tooltip"></div>
+    <div id="toast"></div>
+
+<script>
+
+    </script>
+    <!-- External JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>
