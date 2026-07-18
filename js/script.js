@@ -4018,11 +4018,21 @@ if (selectedNoteId && selectedNoteId !== id) saveCurrentNote();
             const startTime = Date.now();
 
             async function boot() {
-               setTheme(getPref('theme', 'light'));
-initSidebarCollapse();
-                initMobileSidebar();
-                initMobileNotepadTabs();
-                initEventListeners();
+    // Register service worker for offline support + installability
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register('./sw.js');
+            console.log('Service worker registered:', registration.scope);
+        } catch (err) {
+            console.warn('Service worker registration failed:', err);
+        }
+    }
+
+    setTheme(getPref('theme', 'light'));
+    initSidebarCollapse();
+    initMobileSidebar();
+    initMobileNotepadTabs();
+    initEventListeners();
 
                 try {
                     db = await openDB();
