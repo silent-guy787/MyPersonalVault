@@ -159,6 +159,28 @@ html[data-theme="midnight"] {
     --shadow-lg: 0 30px 70px rgba(0, 0, 0, .65);
 }
 
+/* AMOLED - Pure Black Dark theme */
+html[data-theme="amoled"] {
+    --bg: #000000;
+    --bg-soft: #0a0a0a;
+    --surface: #121212;
+    --surface-2: #1a1a1a;
+    --ink: #e8e8e8;
+    --ink-soft: #a8a8a8;
+    --muted: #6a6a6a;
+    --border: #2a2a2a;
+    --border-soft: #222222;
+    --accent: #bb86fc;
+    --accent-strong: #d4a8ff;
+    --accent-soft: #2a1a3a;
+    --accent-ink: #e8d0ff;
+    --good: #4caf7a;
+    --bad: #ef5350;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .50);
+    --shadow-md: 0 10px 28px rgba(0, 0, 0, .70);
+    --shadow-lg: 0 30px 70px rgba(0, 0, 0, .80);
+}
+
 /* Alpine theme overrides */
 html[data-theme="alpine"] .sidebar {
     background: var(--bg-soft);
@@ -311,6 +333,219 @@ html[data-theme="midnight"] .theme-card[data-theme="midnight"] {
 }
 html[data-theme="midnight"] .theme-card[data-theme="midnight"] .theme-preview {
     background: var(--bg);
+}
+
+/* AMOLED theme overrides */
+html[data-theme="amoled"] .sidebar {
+    background: var(--bg-soft);
+    border-right-color: var(--border);
+}
+html[data-theme="amoled"] .entry-card {
+    border-color: var(--border);
+    background: var(--surface);
+}
+html[data-theme="amoled"] .settings-card {
+    border-color: var(--border);
+    background: var(--surface);
+}
+html[data-theme="amoled"] .inline-panel {
+    border-color: var(--border);
+    background: var(--surface);
+}
+html[data-theme="amoled"] .filter-menu {
+    background: var(--surface);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .filter-menu-item:hover {
+    background: var(--surface-2);
+}
+html[data-theme="amoled"] .filter-menu-item.active {
+    color: var(--accent);
+}
+html[data-theme="amoled"] #lockScreen {
+    background: var(--bg);
+}
+html[data-theme="amoled"] .lock-container {
+    background: var(--surface);
+}
+html[data-theme="amoled"] .lock-left {
+    background: var(--surface);
+}
+html[data-theme="amoled"] .lock-right {
+    background: var(--bg-soft);
+}
+html[data-theme="amoled"] .lock-brand-login {
+    color: var(--ink);
+}
+html[data-theme="amoled"] .theme-card[data-theme="amoled"] {
+    border-color: var(--accent);
+}
+html[data-theme="amoled"] .theme-card[data-theme="amoled"] .theme-preview {
+    background: var(--bg);
+}
+html[data-theme="amoled"] .nav-item.active {
+    background: var(--surface);
+    color: var(--accent-strong);
+}
+html[data-theme="amoled"] .nav-item:hover {
+    background: var(--surface-2);
+}
+html[data-theme="amoled"] .brand-btn:hover {
+    background: var(--surface-2);
+}
+html[data-theme="amoled"] .icon-btn:hover {
+    background: var(--surface-2);
+}
+html[data-theme="amoled"] .form-group input,
+html[data-theme="amoled"] .form-group textarea,
+html[data-theme="amoled"] .form-group select {
+    background: var(--surface-2);
+}
+html[data-theme="amoled"] .pill-entry {
+    background: var(--surface-2);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .folder-item:hover,
+html[data-theme="amoled"] .note-item:hover {
+    background: var(--surface-2);
+}
+html[data-theme="amoled"] .folder-item.active,
+html[data-theme="amoled"] .note-item.active {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+html[data-theme="amoled"] .goal-check {
+    background: var(--surface-2);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .goal-check.done {
+    background: var(--good);
+    border-color: var(--good);
+}
+html[data-theme="amoled"] .inline-form {
+    background: var(--surface-2);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .status-pill.on {
+    background: rgba(76, 175, 122, 0.15);
+    color: var(--good);
+}
+html[data-theme="amoled"] .status-pill.off {
+    background: rgba(239, 83, 80, 0.12);
+    color: var(--bad);
+}
+html[data-theme="amoled"] .empty-state {
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .modal-head {
+    border-bottom: 1px solid var(--border-soft);
+}
+html[data-theme="amoled"] .modal-foot {
+    border-top: 1px solid var(--border-soft);
+}
+html[data-theme="amoled"] .entry-tab {
+    background: var(--accent);
+    color: #000000;
+}
+html[data-theme="amoled"] .entry-tab.trash-tab {
+    background: var(--bad);
+    color: #000000;
+}
+html[data-theme="amoled"] .btn-primary {
+    color: #000000;
+}
+html[data-theme="amoled"] .btn-success {
+    color: #000000;
+}
+html[data-theme="amoled"] .brand svg rect {
+    fill: var(--accent);
+}
+html[data-theme="amoled"] #splash {
+    background: radial-gradient(120% 120% at 50% 30%, #0a0a0a 0%, #000000 70%);
+}
+html[data-theme="amoled"] .dial-ring {
+    stroke: #3a3a3a;
+}
+html[data-theme="amoled"] .dial-tick {
+    stroke: #5a5a5a;
+}
+html[data-theme="amoled"] .splash-word {
+    color: #e8e8e8;
+}
+html[data-theme="amoled"] .splash-sub {
+    color: #6a6a6a;
+}
+html[data-theme="amoled"] #toast {
+    background: #e8e8e8;
+    color: #000000;
+}
+html[data-theme="amoled"] .sb-tooltip {
+    background: #e8e8e8;
+    color: #000000;
+}
+html[data-theme="amoled"] ::selection {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+html[data-theme="amoled"] .search-input {
+    background-color: var(--surface);
+}
+html[data-theme="amoled"] .entry-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-soft);
+}
+html[data-theme="amoled"] .vault-mode-toggle {
+    background: var(--surface-2);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .vault-mode-toggle .mode-btn.active {
+    background: var(--surface);
+}
+html[data-theme="amoled"] .card-item {
+    background: var(--surface);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .card-item:hover {
+    border-color: var(--border-soft);
+}
+html[data-theme="amoled"] .card-item .card-info .card-tag {
+    background: var(--surface-2);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .card-empty-state {
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .suggest-item {
+    background: var(--surface-2);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .suggest-item:hover {
+    background: var(--surface);
+    border-color: var(--accent);
+}
+html[data-theme="amoled"] .suggest-item.used {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+html[data-theme="amoled"] .notepad-panel {
+    background: var(--surface);
+    border-color: var(--border);
+}
+html[data-theme="amoled"] .panel-header {
+    border-bottom-color: var(--border-soft);
+}
+html[data-theme="amoled"] .lock-input-wrap input {
+    background: var(--surface);
+}
+html[data-theme="amoled"] .lock-input-wrap input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(187, 134, 252, 0.15);
+}
+html[data-theme="amoled"] .mobile-sidebar-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+html[data-theme="amoled"] .mobile-note-tabs .mnt-btn.active {
+    background: var(--surface);
 }
 
 /* Obsidian (dark2) theme overrides */
@@ -664,6 +899,16 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
 }
 .theme-card[data-theme="dark2"] .preview-line {
     background: #3a3a38;
+}
+
+.theme-card[data-theme="amoled"] .theme-preview {
+    background: #000000;
+}
+.theme-card[data-theme="amoled"] .preview-dot {
+    background: #bb86fc;
+}
+.theme-card[data-theme="amoled"] .preview-line {
+    background: #2a2a2a;
 }
 
 /* Remove old theme toggle styles */
