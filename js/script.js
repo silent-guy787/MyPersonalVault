@@ -602,15 +602,37 @@ function setMeta(key, value) {
     /* ============ END OF TABS ============ */
 
     /* ============ START OF TOAST ============ */
-    function showToast(msg, isError) {
+
+    function promptUpdate(registration) {
+        // Simple version — replace with your own UI (toast/banner) if you like
+        const wantsUpdate = confirm('A new version of Strongbox is available. Reload now?');
+        if (wantsUpdate) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            // Reload once the new SW takes control
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload();
+            });
+        }
+    }
+
+       function showToast(msg, isError) {
         const t = $('toast');
         clearTimeout(toastTimer);
+        // Check if this is an update notification (starts with "A new version")
+        const isUpdate = typeof msg === 'string' && msg.startsWith('A new version');
         const iconOk = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
         const iconErr = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
-        t.innerHTML = (isError ? iconErr : iconOk) + '<span>' + escapeHTML(msg) + '</span>';
+        const iconUpdate = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+        let icon = isError ? iconErr : (isUpdate ? iconUpdate : iconOk);
+        t.innerHTML = icon + '<span>' + escapeHTML(msg) + '</span>';
         t.classList.toggle('err', !!isError);
+        if (isUpdate) {
+            t.classList.add('update-toast');
+        } else {
+            t.classList.remove('update-toast');
+        }
         t.classList.add('show');
-        toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+        toastTimer = setTimeout(() => t.classList.remove('show'), isUpdate ? 6000 : 3200);
     }
     /* ============ END OF TOAST ============ */
 
@@ -4269,11 +4291,32 @@ function initProfileSettings() {
     }
 
     async function boot() {
-        // Register service worker for offline support + installability
+               // Register service worker for offline support + installability
         if ('serviceWorker' in navigator) {
             try {
                 const registration = await navigator.serviceWorker.register('./sw.js');
                 console.log('Service worker registered:', registration.scope);
+
+                // Case 1: a new SW finished installing while this tab is open
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            promptUpdate(registration);
+                        }
+                    });
+                });
+
+                // Optional: actively ask the browser to check for a new sw.js on load
+                registration.update();
+
+                // Case 2: the SW itself detected fresher content (network-first files) and
+                // told us via postMessage, even without a whole new sw.js being deployed
+                navigator.serviceWorker.addEventListener('message', (event) => {
+                    if (event.data && event.data.type === 'SW_UPDATED') {
+                        showToast('A new version is available. Refresh to update.');
+                    }
+                });
             } catch (err) {
                 console.warn('Service worker registration failed:', err);
             }
