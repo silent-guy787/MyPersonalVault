@@ -24,6 +24,7 @@
         'Personal', 'Shopping', 'Gaming', 'Streaming', 'Developer'
     ]);
     let activeVaultFilter = getPref('vaultFilter', 'all');
+    let selectedIconColor = 'default';
 
     let goalItems = [];
     let goalCategories = getPref('goalCategories', ['Financial', 'Health', 'Career']);
@@ -718,6 +719,37 @@
                 '</div>' +
                 '</div>';
         }).join('');
+    }
+
+    function setIconColorSelection(value) {
+        selectedIconColor = value;
+        const row = $('fColorRow');
+        row.querySelectorAll('.icon-color-swatch').forEach(btn => btn.classList.remove('selected'));
+        if (value === 'none') {
+            row.querySelector('[data-color-value="none"]').classList.add('selected');
+            $('fColorCurrentLabel').textContent = 'No icon';
+        } else if (value === 'default') {
+            row.querySelector('[data-color-value="default"]').classList.add('selected');
+            $('fColorCurrentLabel').textContent = 'Default';
+        } else {
+            const preset = row.querySelector('[data-color-value="' + value + '"]');
+            if (preset) {
+                preset.classList.add('selected');
+            } else {
+                $('fColorCustomBtn').classList.add('selected');
+                $('fColorCustomBtn').style.background = value;
+            }
+            $('fColorCustomInput').value = value;
+            $('fColorCurrentLabel').textContent = value.toUpperCase();
+        }
+        if (value !== ($('fColorCustomBtn').dataset.lastCustom || '')) {
+            if (!row.querySelector('[data-color-value="' + value + '"]')) {} else if (value !== 'none' && value !==
+                'default') {
+                $('fColorCustomBtn').style.background = '';
+            } else {
+                $('fColorCustomBtn').style.background = '';
+            }
+        }
     }
 
     function iconEdit() {
@@ -2228,6 +2260,7 @@
         $('fDesc').value = item ? (item.description || '') : '';
         populateVaultCategorySelect(item && item.category ? item.category : vaultCategories[0]);
         if (item && item.iconDisabled) setIconColorSelection('none');
+        else if (item && item.iconColor) setIconColorSelection(item.iconColor);
         else setIconColorSelection('default');
         openModal('vaultModalOverlay');
         setTimeout(() => $('fName').focus(), 150);
@@ -2263,6 +2296,10 @@
         }
         item.category = category;
         item.description = $('fDesc').value.trim();
+        if (selectedIconColor === 'none') { item.iconDisabled = true;
+            item.iconColor = null; } else if (selectedIconColor === 'default') { item.iconDisabled = false;
+            item.iconColor = null; } else { item.iconDisabled = false;
+            item.iconColor = selectedIconColor; }
         item.updatedAt = now;
         try {
             await writeRecord('vault', item);
@@ -3850,6 +3887,14 @@
         $('vaultModalOverlay').addEventListener('click', e => { if (e.target.id === 'vaultModalOverlay')
                 closeModal('vaultModalOverlay'); });
         $('vaultModalSave').addEventListener('click', saveVaultModal);
+
+        $('fColorRow').addEventListener('click', e => {
+            const btn = e.target.closest('.icon-color-swatch');
+            if (!btn) return;
+            if (btn.id === 'fColorCustomBtn') { $('fColorCustomInput').click(); return; }
+            setIconColorSelection(btn.dataset.colorValue);
+        });
+        $('fColorCustomInput').addEventListener('input', e => setIconColorSelection(e.target.value));
 
         $('vaultSearch').addEventListener('input', function() {
             if (vaultMode === 'passwords') {
