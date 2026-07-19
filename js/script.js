@@ -41,7 +41,8 @@
 
     let searchIndex = { vault: new Map(), goals: new Map(), notes: new Map(), folders: new Map() };
 
-    let autoLockTimer = null;
+ let autoLockTimer = null;
+    let profileAvatarDataUrl = null;
     let toastTimer = null;
     let clipboardTimer = null;
     /* ============ END OF STATE ============ */
@@ -441,13 +442,60 @@
         return out;
     }
 
+async function loadProfileSettings() {
+        const profile = await getMeta('userProfile', null);
+        profileAvatarDataUrl = (profile && profile.avatar) ? profile.avatar : null;
+        $('profileName').value = profile && profile.name ? profile.name : '';
+        $('profileEmail').value = profile && profile.email ? profile.email : '';
+        $('profileGender').value = profile && profile.gender ? profile.gender : '';
+        $('profileBio').value = profile && profile.bio ? profile.bio : '';
+        renderProfileAvatarPreview();
+    }
+
+    function renderProfileAvatarPreview() {
+        const img = $('profileAvatarImg');
+        const initialSpan = $('profileAvatarInitial');
+        if (profileAvatarDataUrl) {
+            img.src = profileAvatarDataUrl;
+            img.style.display = 'block';
+            initialSpan.style.display = 'none';
+        } else {
+            img.style.display = 'none';
+            initialSpan.style.display = 'block';
+            const name = $('profileName').value.trim();
+            initialSpan.textContent = name ? name.charAt(0).toUpperCase() : '?';
+        }
+    }
+
+    async function saveProfileSettings() {
+        const profile = {
+            name: $('profileName').value.trim(),
+            email: $('profileEmail').value.trim(),
+            gender: $('profileGender').value,
+            bio: $('profileBio').value.trim(),
+            avatar: profileAvatarDataUrl
+        };
+        await setMeta('userProfile', profile);
+        renderProfileAvatarPreview();
+        showToast('Profile saved');
+    }
+
     async function getMeta(key, fallback) {
         const rec = await idbGet('meta', key);
         return rec ? rec.value : fallback;
     }
 
-    function setMeta(key, value) {
+function setMeta(key, value) {
         return idbPut('meta', { key, value });
+    }
+
+    function readImageAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     }
 
     function getPref(key, fallback) {
@@ -4192,6 +4240,34 @@ document.querySelectorAll('.theme-card').forEach(card => {
     const sessionStart = Date.now();
     const startTime = Date.now();
 
+function initProfileSettings() {
+        $('profileChangePicBtn').addEventListener('click', () => $('profilePicInput').click());
+
+        $('profilePicInput').addEventListener('change', async (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('Please choose an image file', true);
+                return;
+            }
+            try {
+                profileAvatarDataUrl = await readImageAsDataURL(file);
+                renderProfileAvatarPreview();
+            } catch (err) {
+                showToast('Could not read that image', true);
+            }
+            e.target.value = '';
+        });
+
+        $('profileRemovePicBtn').addEventListener('click', () => {
+            profileAvatarDataUrl = null;
+            renderProfileAvatarPreview();
+        });
+
+        $('profileName').addEventListener('input', renderProfileAvatarPreview);
+        $('profileSaveBtn').addEventListener('click', saveProfileSettings);
+    }
+
     async function boot() {
         // Register service worker for offline support + installability
         if ('serviceWorker' in navigator) {
@@ -4207,14 +4283,16 @@ document.querySelectorAll('.theme-card').forEach(card => {
         initSidebarCollapse();
         initMobileSidebar();
         initMobileNotepadTabs();
-        initEventListeners();
+       initEventListeners();
+        initProfileSettings();
 
         try {
             db = await openDB();
             lockEnabled = await getMeta('lockEnabled', false);
             encryptionEnabled = await getMeta('encryptionEnabled', false);
             saltB64 = await getMeta('salt', null);
-            autoLockMinutes = await getMeta('autoLockMinutes', AUTOLOCK_DEFAULT_MIN);
+           autoLockMinutes = await getMeta('autoLockMinutes', AUTOLOCK_DEFAULT_MIN);
+            await loadProfileSettings();
 
             if (!lockEnabled) {
                 await loadAllData();
