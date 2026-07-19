@@ -24,6 +24,7 @@
         'Personal', 'Shopping', 'Gaming', 'Streaming', 'Developer'
     ]);
     let activeVaultFilter = getPref('vaultFilter', 'all');
+    let vaultCardStyle = getPref('vaultCardStyle', 'card'); // 'card' | 'row'
 
     let goalItems = [];
     let goalCategories = getPref('goalCategories', ['Financial', 'Health', 'Career']);
@@ -679,9 +680,13 @@
             return;
         }
 
+        list.classList.toggle('vault-list-row', vaultCardStyle === 'row');
+
         list.innerHTML = items.map(item => {
             const secretId = 'sec_' + item.id;
+            if (vaultCardStyle === 'row') return renderVaultRowHTML(item, secretId);
             return '<div class="entry-card" data-id="' + item.id + '">' +
+                renderColorDotHTML(item) +
                 '<div class="entry-tab">VAULT</div>' +
                 '<div class="entry-top">' +
                 '<div><div class="entry-name">' + escapeHTML(item.name) +
@@ -718,6 +723,45 @@
                 '</div>' +
                 '</div>';
         }).join('');
+    }
+
+    function setVaultCardStyle(style) {
+        vaultCardStyle = style;
+        setPref('vaultCardStyle', style);
+        $('vaultViewToggleLabel').textContent = style === 'row' ? 'View: Compact' : 'View: Cards';
+        renderVault();
+    }
+
+    function renderVaultRowHTML(item, secretId) {
+        const initial = (item.name || '?').trim().charAt(0).toUpperCase() || '?';
+        return '<div class="entry-card entry-row" data-id="' + item.id + '">' +
+            '<div class="entry-row-icon">' + escapeHTML(initial) + '</div>' +
+            '<div class="entry-row-main">' +
+            '<div class="entry-row-name">' + escapeHTML(item.name) +
+            (isURL(item.name) ? ' <button class="open-link-btn" title="Open link" data-url="' + escapeAttr(
+                extractURL(item.name)) +
+            '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>' :
+                '') +
+            '</div>' +
+            (item.username ? '<div class="entry-row-user">' + escapeHTML(item.username) + '</div>' : '') +
+            '</div>' +
+            '<div class="entry-row-side">' +
+            (item.category ? '<span class="goal-category-tag">' + escapeHTML(item.category) + '</span>' : '') +
+            '<div class="field-value secret entry-row-secret">' +
+            '<span id="' + secretId + '" data-secret="' + escapeAttr(item.password || '') + '">' + '•'.repeat(
+                Math.min(item.password ? item.password.length : 8, 14)) + '</span>' +
+            '<button class="mini-icon-btn reveal-btn" data-target="' + secretId +
+            '" title="Show/hide">' + iconEye() + '</button>' +
+            '<button class="mini-icon-btn copy-btn" data-copy="' + escapeAttr(item.password || '') +
+            '" title="Copy">' + iconCopy() + '</button>' +
+            '</div>' +
+            '</div>' +
+            '<div class="entry-menu entry-row-actions">' +
+            '<button class="icon-btn edit-vault" title="Edit">' + iconEdit() + '</button>' +
+            '<button class="icon-btn danger delete-vault" title="Move to trash">' + iconTrash() +
+            '</button>' +
+            '</div>' +
+            '</div>';
     }
 
     function iconEdit() {
@@ -3857,6 +3901,11 @@
             }
             updateVaultCount();
         });
+
+      $('vaultViewToggleBtn').addEventListener('click', () => {
+            setVaultCardStyle(vaultCardStyle === 'row' ? 'card' : 'row');
+        });
+        $('vaultViewToggleLabel').textContent = vaultCardStyle === 'row' ? 'View: Compact' : 'View: Cards';
 
         $('vaultList').addEventListener('click', e => {
             const card = e.target.closest('.entry-card');
