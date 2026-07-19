@@ -3071,6 +3071,39 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             opacity: .55
         }
 
+
+/* Prevent checklist nesting issues */
+.note-editor .note-check-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 4px 0;
+    padding: 2px 0;
+    width: 100%;
+}
+.note-editor .note-check-line .note-check {
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+.note-editor .note-check-line .note-check-text {
+    flex: 1;
+    min-width: 1px;
+    word-break: break-word;
+    padding: 0 2px;
+}
+.note-editor .note-check-line.checked .note-check-text {
+    text-decoration: line-through;
+    opacity: .55;
+}
+.note-editor .note-check-line:has(.note-check:checked) .note-check-text {
+    text-decoration: line-through;
+    opacity: .55;
+}
+
         .note-editor ul,
         .note-editor ol {
             padding-left: 24px;
