@@ -1638,9 +1638,29 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--accent, #5B8DEF);
+            background: var(--surface, #fff);
             color: #fff;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,.15);
+        }
+        .entry-row-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .entry-row-icon-fallback {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--accent, #5B8DEF);
+            color: #fff;
             align-items: center;
             justify-content: center;
             font-weight: 700;
