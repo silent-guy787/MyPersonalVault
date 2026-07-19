@@ -1634,22 +1634,6 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             overflow-anchor: none;
             contain: layout style;
         }
-        .entry-color-dot {
-            position: absolute;
-            left: 5px;
-            top: 4px;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: transparent;
-            border: 2px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
-            z-index: 2
-        }
-
-        .entry-color-dot.filled {
-            border-color: rgba(0, 0, 0, .15)
-        }
         .icon-color-row {
             display: flex;
             flex-wrap: wrap;
