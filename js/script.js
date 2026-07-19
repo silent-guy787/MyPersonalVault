@@ -731,10 +731,31 @@
         renderVault();
     }
 
+
+    function getVaultHostname(item) {
+        const raw = (item.logoUrl && item.logoUrl.trim()) ? item.logoUrl.trim() :
+            (isURL(item.name) ? item.name : null);
+        if (!raw) return null;
+        let url = extractURL(raw) || raw;
+        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+        try {
+            const hostname = new URL(url).hostname.replace(/^www\./i, '');
+            return hostname || null;
+        } catch (e) {
+            return null;
+        }
+    }
+    
     function renderVaultRowHTML(item, secretId) {
         const initial = (item.name || '?').trim().charAt(0).toUpperCase() || '?';
+        const hostname = getVaultHostname(item);
+        const iconHTML = hostname ?
+            '<img src="https://icons.duckduckgo.com/ip3/' + escapeAttr(hostname) + '.ico" alt="" ' +
+            'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+            '<span class="entry-row-icon-fallback" style="display:none;">' + escapeHTML(initial) + '</span>' :
+            '<span class="entry-row-icon-fallback" style="display:flex;">' + escapeHTML(initial) + '</span>';
         return '<div class="entry-card entry-row" data-id="' + item.id + '">' +
-            '<div class="entry-row-icon">' + escapeHTML(initial) + '</div>' +
+            '<div class="entry-row-icon">' + iconHTML + '</div>' +
             '<div class="entry-row-main">' +
             '<div class="entry-row-name">' + escapeHTML(item.name) +
             (isURL(item.name) ? ' <button class="open-link-btn" title="Open link" data-url="' + escapeAttr(
@@ -2262,6 +2283,7 @@
             urlHint.textContent = url ? '✓ URL detected: ' + url : '';
             urlHint.style.color = url ? 'var(--good)' : 'var(--muted)';
         }
+        $('fLogoUrl').value = item ? (item.logoUrl || '') : '';
         $('fUsername').value = item ? (item.username || '') : '';
         $('fSecret').value = item ? (item.password || '') : '';
         $('fSecret').type = 'password';
@@ -2297,6 +2319,7 @@
             category = newName;
         }
         item.name = name;
+        item.logoUrl = $('fLogoUrl').value.trim();
         item.username = $('fUsername').value.trim();
         item.password = $('fSecret').value;
         if (item.password && item.password.trim()) {
