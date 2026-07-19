@@ -519,6 +519,45 @@
             <section class="view" id="settingsView">
                 <div class="view-header"><div><h1 class="view-title">Settings</h1></div></div>
 
+                <div class="settings-card" id="profileSettingsCard">
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</h3>
+    <p class="settings-desc">Your personal profile, stored locally on this device.</p>
+
+    <div class="profile-row">
+        <div class="profile-avatar" id="profileAvatarPreview">
+            <span id="profileAvatarInitial">?</span>
+            <img id="profileAvatarImg" style="display:none;" alt="Profile picture">
+        </div>
+        <div class="profile-avatar-actions">
+            <button type="button" class="btn btn-ghost" id="profileChangePicBtn">Change photo</button>
+            <button type="button" class="btn btn-ghost danger" id="profileRemovePicBtn">Remove</button>
+            <input type="file" id="profilePicInput" accept="image/*" style="display:none;">
+        </div>
+    </div>
+
+    <div class="modal-grid2" style="margin-top:18px;">
+        <div class="form-group"><label>Name</label><input type="text" id="profileName" placeholder="Your name"></div>
+        <div class="form-group"><label>Email <span style="text-transform:none;font-weight:400;">(optional)</span></label><input type="email" id="profileEmail" placeholder="you@example.com"></div>
+    </div>
+    <div class="form-group">
+        <label>Gender <span style="text-transform:none;font-weight:400;">(optional)</span></label>
+        <select id="profileGender">
+            <option value="">Prefer not to say</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="nonbinary">Non-binary</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Bio / Description <span style="text-transform:none;font-weight:400;">(optional)</span></label>
+        <textarea id="profileBio" rows="3" placeholder="A short bio about yourself"></textarea>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+        <button type="button" class="btn btn-primary" id="profileSaveBtn">Save profile</button>
+    </div>
+                </div>
+
                 <div class="settings-card">
     <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/></svg>Appearance</h3>
     <p class="settings-desc">Choose how Strongbox looks on this device.</p>
