@@ -1257,7 +1257,7 @@ function setMeta(key, value) {
         scheduleNoteSave();
     }
 
-    function insertChecklistItem() {
+        function insertChecklistItem() {
         const editor = $('noteEditor');
         editor.focus();
         const sel = window.getSelection();
@@ -1270,6 +1270,59 @@ function setMeta(key, value) {
         }
         const range = sel.getRangeAt(0);
         range.deleteContents();
+        
+        // Check if we're inside an existing checklist line
+        let currentLine = null;
+        let currentCheck = null;
+        let currentNode = sel.anchorNode;
+        
+        // Find the closest checklist line
+        while (currentNode && currentNode !== editor) {
+            if (currentNode.nodeType === 1 && currentNode.classList && currentNode.classList.contains('note-check-line')) {
+                currentLine = currentNode;
+                break;
+            }
+            currentNode = currentNode.parentNode;
+        }
+        
+        // If we're in a checklist line, check if the text is empty or at the end
+        if (currentLine) {
+            const textSpan = currentLine.querySelector('.note-check-text');
+            const cb = currentLine.querySelector('.note-check');
+            if (textSpan && textSpan.textContent.trim() === '') {
+                // Empty line - remove it and insert a new one at the same level
+                const parent = currentLine.parentNode;
+                const newLine = document.createElement('div');
+                newLine.className = 'note-check-line';
+                const newCb = document.createElement('input');
+                newCb.type = 'checkbox';
+                newCb.className = 'note-check';
+                const newTextSpan = document.createElement('span');
+                newTextSpan.className = 'note-check-text';
+                newTextSpan.innerHTML = '&nbsp;';
+                newLine.appendChild(newCb);
+                newLine.appendChild(newTextSpan);
+                
+                // Insert after current line
+                if (parent) {
+                    parent.insertBefore(newLine, currentLine.nextSibling);
+                    currentLine.remove();
+                    
+                    // Focus on the new line's text
+                    const newRange = document.createRange();
+                    newRange.selectNodeContents(newTextSpan);
+                    newRange.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(newRange);
+                    
+                    editor.dataset.empty = editor.textContent.trim() === '' ? 'true' : 'false';
+                    scheduleNoteSave();
+                    return;
+                }
+            }
+        }
+        
+        // Create a new checklist line at the current cursor position
         const line = document.createElement('div');
         line.className = 'note-check-line';
         const cb = document.createElement('input');
@@ -1280,12 +1333,17 @@ function setMeta(key, value) {
         textSpan.innerHTML = '&nbsp;';
         line.appendChild(cb);
         line.appendChild(textSpan);
+        
+        // Insert at current position
         range.insertNode(line);
+        
+        // Position cursor inside the text span
         const newRange = document.createRange();
         newRange.selectNodeContents(textSpan);
         newRange.collapse(true);
         sel.removeAllRanges();
         sel.addRange(newRange);
+        
         editor.dataset.empty = editor.textContent.trim() === '' ? 'true' : 'false';
         scheduleNoteSave();
     }
@@ -1321,26 +1379,80 @@ function setMeta(key, value) {
                 scheduleNoteSave();
             }
         });
-        editor.addEventListener('keydown', (e) => {
+                editor.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const sel = window.getSelection();
                 if (sel && sel.rangeCount && editor.contains(sel.anchorNode)) {
-                    const line = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentElement
-                        .closest('.note-check-line') : sel.anchorNode.closest && sel.anchorNode
-                        .closest('.note-check-line');
+                    // Check if we're in a checklist line
+                    let currentNode = sel.anchorNode;
+                    let line = null;
+                    while (currentNode && currentNode !== editor) {
+                        if (currentNode.nodeType === 1 && currentNode.classList && currentNode.classList.contains('note-check-line')) {
+                            line = currentNode;
+                            break;
+                        }
+                        currentNode = currentNode.parentNode;
+                    }
+                    
                     if (line) {
                         e.preventDefault();
+                        const textSpan = line.querySelector('.note-check-text');
+                        const cb = line.querySelector('.note-check');
+                        
+                        // If the current line is empty, remove it and create a new one
+                        if (textSpan && textSpan.textContent.trim() === '') {
+                            const parent = line.parentNode;
+                            const newLine = document.createElement('div');
+                            newLine.className = 'note-check-line';
+                            const newCb = document.createElement('input');
+                            newCb.type = 'checkbox';
+                            newCb.className = 'note-check';
+                            const newTextSpan = document.createElement('span');
+                            newTextSpan.className = 'note-check-text';
+                            newTextSpan.innerHTML = '&nbsp;';
+                            newLine.appendChild(newCb);
+                            newLine.appendChild(newTextSpan);
+                            
+                            if (parent) {
+                                parent.insertBefore(newLine, line.nextSibling);
+                                line.remove();
+                                
+                                // Focus on the new line
+                                const newRange = document.createRange();
+                                newRange.selectNodeContents(newTextSpan);
+                                newRange.collapse(true);
+                                sel.removeAllRanges();
+                                sel.addRange(newRange);
+                                
+                                editor.dataset.empty = editor.textContent.trim() === '' ? 'true' : 'false';
+                                scheduleNoteSave();
+                                return;
+                            }
+                        }
+                        
+                        // Insert a new checklist item at the same level
                         insertChecklistItem();
                     }
                 }
             }
         });
-        editor.addEventListener('keydown', (e) => {
+                editor.addEventListener('keydown', (e) => {
             if (e.key === 'Tab') {
                 const sel = window.getSelection();
                 if (sel && sel.rangeCount && editor.contains(sel.anchorNode)) {
                     const node = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentElement :
                         sel.anchorNode;
+                    
+                    // Check if we're in a checklist line - prevent tab indentation
+                    let currentNode = node;
+                    while (currentNode && currentNode !== editor) {
+                        if (currentNode.nodeType === 1 && currentNode.classList && currentNode.classList.contains('note-check-line')) {
+                            e.preventDefault();
+                            return;
+                        }
+                        currentNode = currentNode.parentNode;
+                    }
+                    
                     const li = node.closest ? node.closest('li') : null;
                     if (li) {
                         e.preventDefault();
