@@ -430,13 +430,6 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             background: rgba(219, 122, 111, 0.12);
             color: var(--bad);
         }
-        html[data-theme="dark2"] .icon-color-swatch {
-            border-color: var(--border);
-        }
-        html[data-theme="dark2"] .icon-color-swatch.selected {
-            border-color: var(--ink);
-            box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink);
-        }
         html[data-theme="dark2"] .empty-state {
             border-color: var(--border);
         }
@@ -1633,59 +1626,6 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             transition: box-shadow .18s ease, border-color .18s ease;
             overflow-anchor: none;
             contain: layout style;
-        }
-        .icon-color-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 9px;
-            margin-top: 4px
-        }
-        .icon-color-swatch {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            padding: 0;
-            position: relative;
-            transition: transform .1s ease, border-color .15s ease
-        }
-        .icon-color-swatch:hover {
-            transform: scale(1.08)
-        }
-        .icon-color-swatch.selected {
-            border-color: var(--ink);
-            box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink)
-        }
-        .icon-color-swatch[data-color-value] svg {
-            width: 13px;
-            height: 13px;
-            stroke: var(--ink-soft)
-        }
-        .icon-color-swatch.custom-swatch {
-            border-style: dashed;
-            color: var(--muted)
-        }
-        .icon-color-swatch.custom-swatch svg {
-            width: 14px;
-            height: 14px;
-            stroke: var(--muted)
-        }
-        .icon-color-label-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px
-        }
-        .icon-color-current-label {
-            font-size: 11.5px;
-            color: var(--muted);
-            font-family: var(--font-mono)
         }
         .entry-card:hover {
             box-shadow: var(--shadow-md);
