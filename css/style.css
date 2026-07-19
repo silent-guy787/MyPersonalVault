@@ -1524,11 +1524,19 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             font-family: var(--font-mono);
             letter-spacing: .02em
         }
-        .view-actions {
+                .view-actions {
             display: flex;
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
+            width: 100%;
+        }
+        .view-actions .btn-ghost {
+            font-size: 12px;
+        }
+        .view-actions .btn-ghost svg {
+            width: 14px;
+            height: 14px;
         }
         .search-input {
             background: var(--surface);
@@ -1627,16 +1635,18 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             overflow-anchor: none;
             contain: layout style;
         }
-        .entry-card.entry-row {
+                .entry-card.entry-row {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
+            gap: 12px;
+            padding: 10px 14px;
+            flex-wrap: nowrap;
+            min-height: 56px;
         }
         .entry-row-icon {
             flex: 0 0 auto;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--surface, #fff);
             color: #fff;
@@ -1644,7 +1654,7 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 13px;
             overflow: hidden;
             position: relative;
             box-shadow: 0 1px 3px rgba(0,0,0,.15);
@@ -1664,20 +1674,35 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 13px;
+            display: flex;
         }
         .entry-row-main {
             flex: 1 1 auto;
             min-width: 0;
+            overflow: hidden;
         }
         .entry-row-name {
             font-weight: 600;
+            font-size: 14px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .entry-row-name .open-link-btn {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .entry-row-name .open-link-btn svg {
+            width: 12px;
+            height: 12px;
         }
         .entry-row-user {
-            font-size: 12.5px;
+            font-size: 11.5px;
             color: var(--muted);
             white-space: nowrap;
             overflow: hidden;
@@ -1687,17 +1712,209 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             flex: 0 0 auto;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
         .entry-row-secret {
-            font-size: 12.5px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .entry-row-secret span {
+            font-size: 12px;
+            letter-spacing: 0.1em;
+        }
+        .entry-row-secret .mini-icon-btn {
+            width: 26px;
+            height: 26px;
+        }
+        .entry-row-secret .mini-icon-btn svg {
+            width: 14px;
+            height: 14px;
         }
         .entry-row-actions {
             position: static;
             flex: 0 0 auto;
+            display: flex;
+            gap: 2px;
+        }
+        .entry-row-actions .icon-btn {
+            width: 28px;
+            height: 28px;
+        }
+        .entry-row-actions .icon-btn svg {
+            width: 14px;
+            height: 14px;
         }
         .vault-list-row .entry-card {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+        }
+
+/* ============================================================
+   VAULT ACTION BUTTONS — MOBILE
+   ============================================================ */
+@media (max-width: 640px) {
+    #vaultActionButtons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 100%;
+    }
+    #vaultActionButtons .btn {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 8px 12px;
+        font-size: 12px;
+        justify-content: center;
+        min-height: 36px;
+    }
+    #vaultActionButtons .btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    #vaultActionButtons .btn-ghost {
+        flex: 0 1 auto;
+    }
+    #vaultActionButtons .btn-primary {
+        flex: 1;
+    }
+    .view-actions .search-input {
+        font-size: 13px;
+        padding: 8px 10px 8px 32px;
+        background-size: 13px;
+        background-position: 10px center;
+        min-height: 38px;
+    }
+    .view-actions .btn-ghost {
+        padding: 6px 10px;
+        font-size: 11.5px;
+        min-height: 34px;
+    }
+    .view-actions .btn-ghost svg {
+        width: 13px;
+        height: 13px;
+    }
+    #vaultViewToggleBtn span {
+        display: none;
+    }
+    #vaultViewToggleBtn::after {
+        content: "View";
+        font-size: 11.5px;
+    }
+}
+
+/* Compact/Row view toggle */
+#vaultViewToggleBtn {
+    white-space: nowrap;
+}
+@media (max-width: 640px) {
+    #vaultViewToggleBtn {
+        padding: 6px 10px;
+        min-width: 56px;
+    }
+    #vaultViewToggleBtn svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+
+/* ============================================================
+   COMPACT ROW VIEW — MOBILE OPTIMIZATIONS
+   ============================================================ */
+@media (max-width: 640px) {
+    .entry-card.entry-row {
+        padding: 8px 10px;
+        gap: 10px;
+        min-height: 48px;
+        border-radius: var(--radius-s);
+    }
+    .entry-row-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+    .entry-row-name {
+        font-size: 12.5px;
+    }
+    .entry-row-user {
+        font-size: 10.5px;
+    }
+    .entry-row-secret {
+        font-size: 10.5px;
+    }
+    .entry-row-secret span {
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+    }
+    .entry-row-secret .mini-icon-btn {
+        width: 22px;
+        height: 22px;
+        padding: 0;
+    }
+    .entry-row-secret .mini-icon-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    .entry-row-actions .icon-btn {
+        width: 24px;
+        height: 24px;
+    }
+    .entry-row-actions .icon-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    .entry-row-side {
+        gap: 4px;
+    }
+    .entry-row .goal-category-tag {
+        font-size: 8px;
+        padding: 1px 6px;
+    }
+    .entry-row .open-link-btn {
+        width: 18px;
+        height: 18px;
+    }
+    .entry-row .open-link-btn svg {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .entry-card.entry-row {
+        padding: 6px 8px;
+        gap: 8px;
+        min-height: 42px;
+        flex-wrap: wrap;
+    }
+    .entry-row-main {
+        flex: 1 1 60%;
+        min-width: 80px;
+    }
+    .entry-row-side {
+        flex: 0 1 auto;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .entry-row-name {
+        font-size: 11.5px;
+    }
+    .entry-row-user {
+        font-size: 10px;
+    }
+    .entry-row-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 10px;
+    }
+}
+
+        .entry-row .goal-category-tag {
+            font-size: 9px;
+            padding: 2px 8px;
+            margin-top: 0;
         }
         .entry-card:hover {
             box-shadow: var(--shadow-md);
