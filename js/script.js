@@ -686,7 +686,6 @@
             const secretId = 'sec_' + item.id;
             if (vaultCardStyle === 'row') return renderVaultRowHTML(item, secretId);
             return '<div class="entry-card" data-id="' + item.id + '">' +
-                renderColorDotHTML(item) +
                 '<div class="entry-tab">VAULT</div>' +
                 '<div class="entry-top">' +
                 '<div><div class="entry-name">' + escapeHTML(item.name) +
