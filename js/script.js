@@ -19,6 +19,7 @@
     let lastUnlockPassword = null;
     let saltB64 = null;
     let lockEnabled = false;
+    let syncMode = 'device'; // 'device' = local-only lock, 'cloud' = Firebase-backed lock
     let encryptionEnabled = false;
     let autoLockMinutes = AUTOLOCK_DEFAULT_MIN;
     let isLocked = false;
@@ -3770,7 +3771,21 @@ function initPasswordGenerator() {
     /* ============ END OF VAULT MODE RENDER ============ */
 
     /* ============ START OF LOCK SCREEN ============ */
+    function applyLockScreenMode() {
+        const wrap = document.getElementById('lockEmailWrap');
+        if (!wrap) return;
+        if (syncMode === 'cloud') {
+            wrap.style.display = '';
+            $('lockScreenLabel').textContent = 'Sign in to your vault';
+        } else {
+            wrap.style.display = 'none';
+            $('lockEmailInput').value = '';
+            $('lockScreenLabel').textContent = 'Enter your password';
+        }
+    }
+
     function showLockScreen(forInitialSetup) {
+        applyLockScreenMode();
         isLocked = true;
         lastUnlockEmail = null;
         lastUnlockPassword = null;
@@ -3799,23 +3814,25 @@ function initPasswordGenerator() {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    async function attemptUnlock() {
+   async function attemptUnlock() {
         const btn = $('lockUnlockBtn');
         const pass = $('lockPasswordInput').value;
-        const email = $('lockEmailInput').value.trim();
+        const email = syncMode === 'cloud' ? $('lockEmailInput').value.trim() : '';
         const errEl = $('lockError');
         errEl.textContent = '';
 
-        if (!email) {
-            errEl.textContent = 'Please enter your email address.';
-            $('lockEmailInput').focus();
-            return;
-        }
-        if (!isValidEmail(email)) {
-            errEl.textContent = 'Please enter a valid email address (e.g., name@example.com).';
-            $('lockEmailInput').focus();
-            $('lockEmailInput').select();
-            return;
+        if (syncMode === 'cloud') {
+            if (!email) {
+                errEl.textContent = 'Please enter your email address.';
+                $('lockEmailInput').focus();
+                return;
+            }
+            if (!isValidEmail(email)) {
+                errEl.textContent = 'Please enter a valid email address (e.g., name@example.com).';
+                $('lockEmailInput').focus();
+                $('lockEmailInput').select();
+                return;
+            }
         }
 
         if (!pass) {
@@ -3850,9 +3867,9 @@ function initPasswordGenerator() {
             await loadAllData();
             initGenUsedFromVault();
             renderEverything();
-            hideLockScreen();
+           hideLockScreen();
             showToast('Unlocked');
-            performCloudSync(email, pass);
+            if (syncMode === 'cloud') performCloudSync(email, pass);
         } catch (err) {
             console.error(err);
             errEl.textContent = 'Something went wrong while unlocking. Please try again.';
@@ -3890,8 +3907,12 @@ function initPasswordGenerator() {
         const dormant = !lockEnabled && !!saltB64;
         $('lockToggle').checked = lockEnabled;
         $('lockStateWord').textContent = lockEnabled ? 'on' : (dormant ? 'off (password saved)' : 'off');
-        $('lockSetSection').style.display = (lockEnabled || saltB64) ? 'none' : ($('lockToggle').dataset
+       $('lockSetSection').style.display = (lockEnabled || saltB64) ? 'none' : ($('lockToggle').dataset
             .pendingOn === '1' ? 'flex' : 'none');
+        if ($('cloudRestoreSection')) {
+            $('cloudRestoreSection').style.display = (lockEnabled || saltB64) ? 'none' : ($('lockToggle')
+                .dataset.pendingOn === '1' ? 'block' : 'none');
+        }
         $('lockManageSection').style.display = (lockEnabled || dormant) ? 'block' : 'none';
         $('openChangePassBtn').style.display = lockEnabled ? 'inline-flex' : 'none';
         $('openResetLockBtn').style.display = (lockEnabled || dormant) ? 'inline-flex' : 'none';
@@ -3931,6 +3952,11 @@ function initPasswordGenerator() {
     }
 
     function feedback(el, ok, msg) {
+        if (ok === null) {
+            el.innerHTML = '<div class="lock-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>' +
+                escapeHTML(msg) + '</div>';
+            return;
+        }
         const icon = ok ?
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' :
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
@@ -4052,12 +4078,14 @@ function initPasswordGenerator() {
                 saltB64 = newSalt;
                 encryptionEnabled = true;
                 lockEnabled = true;
+                syncMode = 'device';
                 await reencryptAllData();
                 await setMeta('salt', newSalt);
                 await setMeta('verifierIv', iv);
                 await setMeta('verifierCipher', cipher);
                 await setMeta('lockEnabled', true);
                 await setMeta('encryptionEnabled', true);
+                await setMeta('syncMode', 'device');
                 feedback(fb, true, 'Lock screen enabled and your data has been encrypted.');
                 showToast('Lock screen enabled');
                 $('lockToggle').dataset.pendingOn = '0';
@@ -4068,6 +4096,61 @@ function initPasswordGenerator() {
                 feedback(fb, false, 'Could not save settings: ' + (err && err.message ? err.message :
                     'unknown error'));
             } finally {
+                this.disabled = false;
+            }
+        });
+
+        $('cloudRestoreBtn').addEventListener('click', async function() {
+            const email = $('cloudRestoreEmail').value.trim();
+            const pass = $('cloudRestorePassword').value;
+            const fb = $('cloudRestoreFeedback');
+            if (!email || !isValidEmail(email)) {
+                feedback(fb, false, 'Please enter a valid email address.');
+                return;
+            }
+            if (!pass) { feedback(fb, false, 'Please enter your password.'); return; }
+            if (saltB64 || lockEnabled) {
+                feedback(fb, false, 'A lock is already set up on this device.');
+                return;
+            }
+            this.disabled = true;
+            feedback(fb, null, 'Connecting…');
+            try {
+                const fbReady = await waitForFirebaseSyncReady();
+                if (!fbReady || !window.FirebaseSync.isConfigured()) {
+                    feedback(fb, false, 'Cloud sync is not configured yet.');
+                    this.disabled = false;
+                    return;
+                }
+                await window.FirebaseSync.signIn(email, pass);
+
+                const remoteMeta = await window.FirebaseSync.pullAllMeta();
+                if (!remoteMeta.some(m => m.key === 'salt')) {
+                    feedback(fb, false, 'No cloud vault found for this account.');
+                    await window.FirebaseSync.signOut();
+                    this.disabled = false;
+                    return;
+                }
+                // Write remote meta down exactly as-is — no new salt/verifier
+                // is generated locally, so the derived key matches the
+                // account's original device.
+                for (const m of remoteMeta) {
+                    await idbPut('meta', { key: m.key, value: m.value });
+                }
+                await idbPut('meta', { key: 'syncMode', value: 'cloud' });
+
+                const remoteRecords = await window.FirebaseSync.pullAllRecords();
+                for (const r of remoteRecords) {
+                    await idbPut('records', r);
+                }
+
+                feedback(fb, true, 'Vault restored. Reloading…');
+                showToast('Cloud data restored — sign in to continue');
+                setTimeout(() => location.reload(), 900);
+            } catch (err) {
+                console.error(err);
+                feedback(fb, false, 'Restore failed: ' + (err && err.message ? err.message :
+                    'Check your email and password.'));
                 this.disabled = false;
             }
         });
@@ -4832,6 +4915,7 @@ function initProfileSettings() {
             lockEnabled = await getMeta('lockEnabled', false);
             encryptionEnabled = await getMeta('encryptionEnabled', false);
             saltB64 = await getMeta('salt', null);
+            syncMode = await getMeta('syncMode', 'device');
            autoLockMinutes = await getMeta('autoLockMinutes', AUTOLOCK_DEFAULT_MIN);
             await loadProfileSettings();
 
@@ -4849,12 +4933,12 @@ function initProfileSettings() {
         const remaining = Math.max(0, minDelay - elapsed);
 
         setTimeout(() => {
-            if (lockEnabled) {
+           if (lockEnabled) {
                 $('app').classList.add('no-anim');
                 $('lockScreen').classList.add('no-anim');
                 $('app').classList.add('locked');
                 $('lockScreen').classList.add('visible');
-                $('lockScreenLabel').textContent = 'Sign in to your vault';
+                applyLockScreenMode();
                 isLocked = true;
                 $('lockPasswordInput').value = '';
                 $('lockEmailInput').value = '';
