@@ -1500,57 +1500,121 @@ function setMeta(key, value) {
     }
     /* ============ END OF EDITOR TOOLBAR ============ */
 
-    /* ============ START OF PASSWORD SUGGESTIONS ============ */
-    const PASSWORD_SUGGESTIONS = {
-        low: [
-            'BlueSky2026', 'CoffeeMug42', 'HappyDaisy77', 'SunsetVibe12', 'GreenTurtle9',
-            'RainyDay23', 'StarLight55', 'OceanWave31', 'MountainAir88', 'PurpleRain19',
-            'SilverMoon44', 'GoldenSun72', 'FreshBreeze56', 'AutumnLeaf81', 'WinterSnow63',
-            'SpringBloom27', 'SummerHeat49', 'NightOwl15', 'EarlyBird38', 'LuckyClover66',
-            'RedApple53', 'BlueOcean11', 'WhiteCloud97', 'DarkNight82', 'BrightStar34',
-            'SweetCandy29', 'CoolBreeze73', 'WarmFireplace48', 'CozyBlanket61', 'GentleRain25',
-            'QuietForest37', 'CalmRiver84', 'PeacefulLake59', 'SunnyGarden76', 'WildFlower42',
-            'SoftPillow18', 'FuzzySocks93', 'WarmHug67', 'SweetDream85', 'HappyPlace52',
-            'MagicKey70', 'SecretDoor33', 'HiddenPath99', 'SafeHaven28', 'CozyCorner46',
-            'PeaceCorner14', 'JoyfulHeart80', 'KindSoul57', 'BraveSpirit21', 'WiseMind90'
+/* ============ START OF PASSWORD SUGGESTIONS ============ */
+const PASSWORD_SUGGESTIONS = {
+    low: [
+        'BlueSky2026', 'CoffeeMug42', 'HappyDaisy77', 'SunsetVibe12', 'GreenTurtle9',
+        'RainyDay23', 'StarLight55', 'OceanWave31', 'MountainAir88', 'PurpleRain19',
+        'SilverMoon44', 'GoldenSun72', 'FreshBreeze56', 'AutumnLeaf81', 'WinterSnow63',
+        'SpringBloom27', 'SummerHeat49', 'NightOwl15', 'EarlyBird38', 'LuckyClover66',
+        'RedApple53', 'BlueOcean11', 'WhiteCloud97', 'DarkNight82', 'BrightStar34',
+        'SweetCandy29', 'CoolBreeze73', 'WarmFireplace48', 'CozyBlanket61', 'GentleRain25',
+        'QuietForest37', 'CalmRiver84', 'PeacefulLake59', 'SunnyGarden76', 'WildFlower42',
+        'SoftPillow18', 'FuzzySocks93', 'WarmHug67', 'SweetDream85', 'HappyPlace52',
+        'MagicKey70', 'SecretDoor33', 'HiddenPath99', 'SafeHaven28', 'CozyCorner46',
+        'PeaceCorner14', 'JoyfulHeart80', 'KindSoul57', 'BraveSpirit21', 'WiseMind90',
+        'CrystalLake12', 'AmberSky44', 'RubyRed88', 'JadeGreen33', 'PearlWhite55',
+        'CoralReef71', 'DiamondDust29', 'SapphireSea83', 'EmeraldBay17', 'TopazSun45',
+        'OpalMoon62', 'GarnetStar39', 'QuartzHill81', 'TurquoiseWave26', 'AmethystSky53',
+        'SunnySmile15', 'HappyFeet43', 'DancingBear77', 'LaughingFox91', 'SmilingCat38',
+        'PlayfulPup64', 'CheerfulBird82', 'MerryMouse57', 'JollyDeer29', 'BouncyBunny46',
+        'FluffyCloud73', 'CottonCandy81', 'Marshmallow19', 'JellyBean55', 'Lollipop62',
+        'BubbleGum34', 'SugarPlum87', 'CandyCane43', 'Chocolate99', 'ButterCup76',
+        'SummerBreeze13', 'AutumnGold58', 'WinterFrost42', 'SpringRain29', 'MorningDew65',
+        'EveningStar88', 'TwilightSky31', 'DawnLight46', 'DuskShadow71', 'MidnightBlue84',
+        'RoseGarden25', 'LilyPad37', 'DaisyChain93', 'Sunflower18', 'LavenderField54',
+        'JasmineBloom69', 'TulipGarden41', 'OrchidMist83', 'MagnoliaTree27', 'IrisRainbow62',
+        'MapleLeaf45', 'OakTree78', 'PineForest31', 'WillowCreek56', 'BirchGrove88',
+        'CedarWood43', 'ElmStreet67', 'AshTree29', 'FirTrail51', 'RedwoodPark84'
+    ],
+    medium: [
+        'Tr@velB0y2026', 'G@m3rLif3!88', 'P!zzaLover42', 'Mu$icFan99', 'B00kW0rm21',
+        'C0d3Mast3r76', 'D@nceStar55', 'F1tness_Guru', 'Ch3fSpec!al', 'Art1st_Dream',
+        'PhotoSn@p33', 'Mov!eBuff44', 'Sport_Fan88', 'N@tureH1ker', 'Cycl!st_Ride',
+        'Gard3n_Grow', 'P3tLover007', 'Y0gaMast3r', 'Z3nMaster20', 'M3ditationOm',
+        'Runn3r_Fast', 'Sw1mmerPro', 'T3nnis_Ace', 'Golfer_Bird', 'Sk8erBoi99',
+        'Surf3rWave', 'Sn0wboarder', 'Sk!Mountain', 'Cl1mbHigh', 'D!veDeep',
+        'Tr@ilRunn3r', 'B1keRide44', 'CampF!re22', 'F1shingRod', 'Sa!lBoat88',
+        'KayaKing77', 'R0ckCl1mber', 'Par@glider', 'Skyd!vePro', 'Bung3eJump',
+        'P@rk0urKing', 'Fr33Runner', 'Danc3Flo0r', 'Dj_Mixer88', 'Gu!tarHero',
+        'Drumm3rBeat', 'Sing3rSong', 'P!an0Keys', 'V!0linPlay', 'Sax0phon3',
+        'C0ff33Addict', 'T3a_L0ver', 'Sush!Chef42', 'T@coTuesd@y', 'BurgerK!ng99',
+        'P@staLov3r', 'S@l@dD@ys55', 'Smooth!eT1me', 'Ju!ceBox44', 'Cupc@keQueen',
+        'C00k!eJar33', 'Br0wn!eBite', 'DonutL0ver', 'W@ffleHouse', 'P@ncakeSt@ck',
+        'St@rG@zer88', 'M00nWalk3r', 'C0metChas3r', 'Astr0N0va', 'G@l@xyQu3st',
+        'NebulaDr3am', 'S0larFl@re', 'Ecl!pseView', 'Orb!tPilot', 'R0cketM@n',
+        'B3@chBum55', 'P@lmTreeLif3', 'C0c0nutW@ter', 'TideP00l', 'S@ndC@stle',
+        'Sh3llC0llect', 'C0r@lDiver', 'W@veJumper', 'SunsetCh@ser', 'H@mm0ckLife',
+        'W1nt3rFrost', 'Sn0wFl@ke77', 'Ic3Qu33n', 'Fr0stByte', 'Bl!zz@rdKing',
+        'Aur0raB0real', 'Gl@ci3rWalk', 'Fr0zenTundr@', 'P0larV0rtex', 'Alp!nePeak',
+        'D3s3rtR0se', 'C@ctusBl00m', 'S@ndDun3', 'O@s!sDr3am', 'Mirag3V!ew',
+        'S@guar0King', 'C@ny0nW@ll', 'M3saV!sta', 'Arroy0Rush', 'B@dl@ndsHik3'
+    ],
+    high: [
+        'K9#mPx2$vL7@nQw', 'Tr8^bN4&yH6*mZc', 'Wp3$jK9!dR5%xFv', 'Qm7@tY2#sL8^nBw',
+        'Xc4%gH6&kM1*pVr', 'Jn5!dF3@wQ9$zCt', 'Lb8^rT6#yU2*mPx', 'Gh3$sW7&xC1%nQv',
+        'Vf9@kE4!pR8^bNt', 'Ds2#mA6*hJ5%yZw', 'Zu7!cX3$vL9&kQr', 'Bn4^wP8@tM2#gFx',
+        'Hj6%rY1!dS5*nCv', 'Mk9&bE3$kQ7^wPt', 'Pw2#tH8@yJ4!mRx', 'Rd5^nC1&gV6$zLb',
+        'Sv8!kM4*xW2@qFj', 'Ty3%pB7#rN9^dHk', 'Ux6$wL1!cV5&tMg', 'Zp9@jF4*mR8#nYb',
+        'Aw2^bQ7$kH3!xPt', 'Cd5&tN8@yM1%vRz', 'Ef9!pW4#gX6^cLj', 'Gh3$rY7*kD2@nQb',
+        'Jk6^mF1!xV5&wPt', 'Lm8%tB4$jR9#zHc', 'Np2@wK7&cL3!yQv', 'Qr5#xM9^nT1$bFj',
+        'St7!dG4*pW6@kRv', 'Uv9&hN2%yB8#mZc', 'Wx3$vJ5!kQ7^tLp', 'Yz6@cF1*wR4&nMb',
+        'Ab8#tK9%pX2$gHj', 'Cd1^yW5!mQ3@vRt', 'Ef4&bN7*nJ6#zXc', 'Gh2$rY8@kM1%wLv',
+        'Ij5!tQ3^pF9&dHb', 'Kl7#xV4*mC6$nJz', 'Mn9@wB2!gR8%yTk', 'Op1&kH5^dL3#qWc',
+        'Qr4$vN7*tY2@jFm', 'St6!bM9%pX5&zRg', 'Uv8#cK1^wJ3$nQb', 'Wx2@rF4!tY7*mdP',
+        'Yz5&gH9%dN6#kLv', 'Bc3$wT8^pJ1@xRm', 'De7!mQ2*nV5#yFg', 'Fh9%bK4&cR6$tWz',
+        'Hj1@xP5^dL8!nMv', 'Kl3#yT7*mF2$gBc', 'Np9^qW4&jR6!xKz', 'Rr2$vC8@tB5#mHn',
+        'Tt7!pL1*wG3^dFj', 'Vv5&nB9%yM4#kQx', 'Xx8@cH2^tR6!wPz', 'Zz3$vK7*pN1&mLb',
+        'Bb6!gT4#dF9^nJw', 'Dd1^yM5&cW8@qRt', 'Ff4*kB7$hP2!xNv', 'Hh9@pW3%rL6#zTb',
+        'Jj2&xQ8^mF5!nCd', 'Ll7#tY1$vK4@gBj', 'Nn5!cM9*wR3&pXn', 'Pp8@nJ2^dH6#qWz',
+        'Rr3$sG7&vB1!kTm', 'Tt6%wL4#yF9@cXp', 'Vv1^bQ8*nM5$jHd', 'Xx9!dT3&pW7#gRk',
+        'Zz4@fK2^tY6!mLv', 'Bb7$rN8*wC1%xPj', 'Dd5&hQ3#vB9@yMt', 'Ff2!jW6^nL4$kXz',
+        'Hh8^cR1*tG7#mPd', 'Jj4@yM9&wF3!nKb', 'Ll6%vT2$kH8^qWx', 'Nn1#pC5!dR7@xJv',
+        'Pp3&bN8*mY4^tLz', 'Rr9!nW2#gQ6$cFj', 'Tt5@xK1*vP7&mHd', 'Vv7^rY4%tB9!nWc',
+        'Xx2$jC8&wM3#qFp', 'Zz6!hT9^kL1@pRg', 'Bb3*mN5$vX7&cJw', 'Dd8#yQ4!tG2^nMb',
+        'Ff1@pR6^wK9%zHd', 'Hh5&bV3$nJ8!qXc', 'Jj9!mT2*tY4#gLp', 'Ll4^cW7&pB1@kRv',
+        'Nn7$rF8!wM5^dHz', 'Pp2#kJ3*vQ9%nTx', 'Rr6@yG1&tB4!cWb', 'Tt8^nX5$pK2#mJv',
+        'Vv3!dM7*wR9^qFc', 'Xx1&bT4#vL6@hPj', 'Zz5@kJ8!nQ2$yWx', 'Bb9^pF3&cM7*tRz'
+    ],
+    pins: {
+        simple: [
+            '1234', '1111', '0000', '2580', '5555', '0852', '2222', '1212', '1998', '2000',
+            '1379', '2468', '1357', '1122', '3344', '5566', '7788', '9900', '1010', '2020',
+            '3030', '4040', '5050', '6060', '7070', '8080', '9090', '0101', '1313', '1515',
+            '1717', '1919', '2121', '2323', '2525', '2727', '2929', '3131', '3333', '3535',
+            '3737', '3939', '4141', '4343', '4545', '4747', '4949', '5151', '5353', '5556',
+            '5757', '5959', '6161', '6363', '6565', '6767', '6969', '7171', '7373', '7575',
+            '7777', '7979', '8181', '8383', '8585', '8787', '8989', '9191', '9393', '9595',
+            '9797', '9999', '1221', '1331', '1441', '1551', '1661', '1771', '1881', '1991',
+            '2112', '2332', '2442', '2552', '2662', '2772', '2882', '2992', '3113', '3223',
+            '3443', '3553', '3663', '3773', '3883', '3993', '4114', '4224', '4334', '4554'
         ],
         medium: [
-            'Tr@velB0y2026', 'G@m3rLif3!88', 'P!zzaLover42', 'Mu$icFan99', 'B00kW0rm21',
-            'C0d3Mast3r76', 'D@nceStar55', 'F1tness_Guru', 'Ch3fSpec!al', 'Art1st_Dream',
-            'PhotoSn@p33', 'Mov!eBuff44', 'Sport_Fan88', 'N@tureH1ker', 'Cycl!st_Ride',
-            'Gard3n_Grow', 'P3tLover007', 'Y0gaMast3r', 'Z3nMaster20', 'M3ditationOm',
-            'Runn3r_Fast', 'Sw1mmerPro', 'T3nnis_Ace', 'Golfer_Bird', 'Sk8erBoi99',
-            'Surf3rWave', 'Sn0wboarder', 'Sk!Mountain', 'Cl1mbHigh', 'D!veDeep',
-            'Tr@ilRunn3r', 'B1keRide44', 'CampF!re22', 'F1shingRod', 'Sa!lBoat88',
-            'KayaKing77', 'R0ckCl1mber', 'Par@glider', 'Skyd!vePro', 'Bung3eJump',
-            'P@rk0urKing', 'Fr33Runner', 'Danc3Flo0r', 'Dj_Mixer88', 'Gu!tarHero',
-            'Drumm3rBeat', 'Sing3rSong', 'P!an0Keys', 'V!0linPlay', 'Sax0phon3'
+            '2748', '3915', '4830', '5193', '6372', '7046', '8264', '9501', '1470', '3681',
+            '5927', '7184', '8409', '9752', '1039', '2164', '3507', '4628', '6893', '8041',
+            '1529', '2647', '3785', '4910', '5273', '6398', '7421', '8564', '9687', '1753',
+            '2846', '3962', '4187', '5309', '6424', '7548', '8671', '9783', '1850', '2975',
+            '3158', '4280', '5394', '6416', '7539', '8652', '9774', '1891', '2914', '4037',
+            '5150', '6273', '7396', '8418', '9531', '1654', '2776', '3899', '4922', '5145',
+            '6268', '7381', '8404', '9527', '1649', '2762', '3885', '4908', '5131', '6254',
+            '7377', '8490', '9513', '1636', '2759', '3872', '4995', '5128', '6241', '7364',
+            '8487', '9500', '1623', '2746', '3869', '4982', '5105', '6228', '7341', '8464',
+            '9587', '1610', '2733', '3856', '4979', '5092', '6215', '7338', '8451', '9574'
         ],
         high: [
-            'K9#mPx2$vL7@nQw', 'Tr8^bN4&yH6*mZc', 'Wp3$jK9!dR5%xFv', 'Qm7@tY2#sL8^nBw',
-            'Xc4%gH6&kM1*pVr', 'Jn5!dF3@wQ9$zCt', 'Lb8^rT6#yU2*mPx', 'Gh3$sW7&xC1%nQv',
-            'Vf9@kE4!pR8^bNt', 'Ds2#mA6*hJ5%yZw', 'Zu7!cX3$vL9&kQr', 'Bn4^wP8@tM2#gFx',
-            'Hj6%rY1!dS5*nCv', 'Mk9&bE3$kQ7^wPt', 'Pw2#tH8@yJ4!mRx', 'Rd5^nC1&gV6$zLb',
-            'Sv8!kM4*xW2@qFj', 'Ty3%pB7#rN9^dHk', 'Ux6$wL1!cV5&tMg', 'Zp9@jF4*mR8#nYb',
-            'Aw2^bQ7$kH3!xPt', 'Cd5&tN8@yM1%vRz', 'Ef9!pW4#gX6^cLj', 'Gh3$rY7*kD2@nQb',
-            'Jk6^mF1!xV5&wPt', 'Lm8%tB4$jR9#zHc', 'Np2@wK7&cL3!yQv', 'Qr5#xM9^nT1$bFj',
-            'St7!dG4*pW6@kRv', 'Uv9&hN2%yB8#mZc', 'Wx3$vJ5!kQ7^tLp', 'Yz6@cF1*wR4&nMb',
-            'Ab8#tK9%pX2$gHj', 'Cd1^yW5!mQ3@vRt', 'Ef4&bN7*nJ6#zXc', 'Gh2$rY8@kM1%wLv',
-            'Ij5!tQ3^pF9&dHb', 'Kl7#xV4*mC6$nJz', 'Mn9@wB2!gR8%yTk', 'Op1&kH5^dL3#qWc',
-            'Qr4$vN7*tY2@jFm', 'St6!bM9%pX5&zRg', 'Uv8#cK1^wJ3$nQb', 'Wx2@rF4!tY7*mdP',
-            'Yz5&gH9%dN6#kLv', 'Bc3$wT8^pJ1@xRm', 'De7!mQ2*nV5#yFg', 'Fh9%bK4&cR6$tWz',
-            'Hj1@xP5^dL8!nMv', 'Kl3#yT7*mF2$gBc'
-        ],
-        pins: {
-            simple: ['1234', '1111', '0000', '2580', '5555', '0852', '2222', '1212', '1998', '2000'],
-            medium: ['2748', '3915', '4830', '5193', '6372', '7046', '8264', '9501', '1470', '3681',
-                '5927', '7184', '8409', '9752', '1039', '2164', '3507', '4628', '6893', '8041'
-            ],
-            high: ['4917', '5832', '6194', '7258', '8370', '9425', '1583', '2049', '3167', '4702',
-                '5286', '6459', '7531', '8694', '9148', '1376', '2590', '3482', '4761', '5028'
-            ]
-        }
-    };
+            '4917', '5832', '6194', '7258', '8370', '9425', '1583', '2049', '3167', '4702',
+            '5286', '6459', '7531', '8694', '9148', '1376', '2590', '3482', '4761', '5028',
+            '6153', '7289', '8340', '9471', '1527', '2648', '3719', '4862', '5934', '6185',
+            '7246', '8397', '9428', '1579', '2630', '3781', '4892', '5943', '6104', '7255',
+            '8376', '9487', '1598', '2619', '3730', '4851', '5972', '6193', '7214', '8335',
+            '9456', '1577', '2688', '3799', '4810', '5931', '6152', '7273', '8394', '9415',
+            '1536', '2647', '3758', '4869', '5980', '6101', '7222', '8343', '9464', '1585',
+            '2696', '3707', '4818', '5929', '6140', '7261', '8382', '9403', '1524', '2635',
+            '3746', '4857', '5968', '6179', '7280', '8391', '9412', '1533', '2644', '3755',
+            '4866', '5977', '6188', '7299', '8300', '9411', '1522', '2633', '3744', '4855'
+        ]
+    }
+};
 
     let usedPasswords = new Set();
 
