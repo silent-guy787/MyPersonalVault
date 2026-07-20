@@ -25,7 +25,8 @@ import {
     deleteDoc,
     getDocs,
     collection,
-    enableIndexedDbPersistence
+    enableIndexedDbPersistence,
+    waitForPendingWrites
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 /* ====================== 1. FILL IN YOUR FIREBASE CONFIG ======================
@@ -54,6 +55,18 @@ const firebaseConfig = {
 const ALLOWED_UID = "Ez9L3HdP7hemxtROIDG4xsRnY2g1";
 
 const VAULT_ROOT = "strongbox_vaults"; // top-level Firestore collection name
+
+// setDoc() resolves as soon as a write is queued LOCALLY — not once the
+// server has actually received it. On mobile especially, a backgrounded
+// tab can leave writes queued indefinitely with no visible error. This
+// wraps a write with a real server-confirmation check + timeout, so a
+// silently stuck write becomes a reported failure instead.
+function confirmWrite(ms) {
+    return Promise.race([
+        waitForPendingWrites(db),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('not confirmed by server within timeout — likely still queued locally')), ms))
+    ]);
+}
 
 let app = null;
 let auth = null;
@@ -125,9 +138,10 @@ async function pushRecord(rec) {
     try {
         const ref = doc(db, VAULT_ROOT, ALLOWED_UID, "records", String(rec.id));
         await setDoc(ref, rec);
+        await confirmWrite(15000);
         return true;
     } catch (err) {
-        console.warn("[FirebaseSync] pushRecord failed (will stay queued locally):", err.message);
+        console.warn("[FirebaseSync] pushRecord failed or unconfirmed (will stay queued locally):", err.message);
         return false;
     }
 }
@@ -136,9 +150,10 @@ async function deleteRecordRemote(id) {
     if (!isSignedIn()) return false;
     try {
         await deleteDoc(doc(db, VAULT_ROOT, ALLOWED_UID, "records", String(id)));
+        await confirmWrite(15000);
         return true;
     } catch (err) {
-        console.warn("[FirebaseSync] deleteRecordRemote failed:", err.message);
+        console.warn("[FirebaseSync] deleteRecordRemote failed or unconfirmed:", err.message);
         return false;
     }
 }
@@ -165,9 +180,10 @@ async function pushMeta(key, value, updatedAt) {
     try {
         const ref = doc(db, VAULT_ROOT, ALLOWED_UID, "meta", String(key));
         await setDoc(ref, { key, value, updatedAt: updatedAt || Date.now() });
+        await confirmWrite(15000);
         return true;
     } catch (err) {
-        console.warn("[FirebaseSync] pushMeta failed:", err.message);
+        console.warn("[FirebaseSync] pushMeta failed or unconfirmed:", err.message);
         window.dispatchEvent(new CustomEvent("firebase-sync-error", { detail: { key, reason: err.message } }));
         return false;
     }
