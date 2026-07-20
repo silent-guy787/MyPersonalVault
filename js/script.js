@@ -488,34 +488,56 @@
     // wins), pushes anything local-only or newer back up, then reloads the
     // in-memory vault from IndexedDB so the UI reflects the merged result.
     async function mergeCloudData() {
-        if (!window.FirebaseSync || !window.FirebaseSync.isSignedIn()) return;
+    if (!window.FirebaseSync || !window.FirebaseSync.isSignedIn()) return;
 
-        const remoteMetaList = await window.FirebaseSync.pullAllMeta();
-        for (const m of remoteMetaList) {
-            const localRec = await idbGet('meta', m.key);
-            if (!localRec) {
-                await idbPut('meta', { key: m.key, value: m.value });
-            }
+    // --- 1. Sync META bidirectionally ---
+    const remoteMetaList = await window.FirebaseSync.pullAllMeta();
+    const remoteMetaMap = new Map(remoteMetaList.map(m => [m.key, m]));
+
+    const localMetaList = await idbGetAllMeta();
+    const localMetaMap = new Map(localMetaList.map(m => [m.key, m]));
+
+    // Pull remote meta -> local (if remote is newer or local missing)
+    for (const [key, remote] of remoteMetaMap) {
+        const local = localMetaMap.get(key);
+        if (!local || (remote.updatedAt || 0) > (local.updatedAt || 0)) {
+            await idbPut('meta', { key: remote.key, value: remote.value, updatedAt: remote.updatedAt || Date.now() });
         }
+    }
 
-        const remoteRecords = await window.FirebaseSync.pullAllRecords();
-        const remoteById = new Map(remoteRecords.map(r => [String(r.id), r]));
-        const localRecords = await idbGetAllRecordsRaw();
-        const localById = new Map(localRecords.map(r => [String(r.id), r]));
-
-        for (const rr of remoteRecords) {
-            const lr = localById.get(String(rr.id));
-            if (!lr || (rr.updatedAt || 0) > (lr.updatedAt || 0)) {
-                await idbPut('records', rr);
-            }
-        }
-        for (const lr of localRecords) {
-            const rr = remoteById.get(String(lr.id));
-            if (!rr || (lr.updatedAt || 0) > (rr.updatedAt || 0)) {
-                syncPushRecord(lr);
+    // Push local meta -> remote (if local is newer, skip critical password keys)
+    const META_SYNC_BLOCKLIST = ['salt', 'verifierIv', 'verifierCipher'];
+    for (const [key, local] of localMetaMap) {
+        if (META_SYNC_BLOCKLIST.includes(key)) continue;
+        const remote = remoteMetaMap.get(key);
+        if (!remote || (local.updatedAt || 0) > (remote.updatedAt || 0)) {
+            try {
+                await window.FirebaseSync.pushMeta(key, local.value);
+            } catch (e) {
+                console.warn('Failed to push meta', key, e);
             }
         }
     }
+
+    // --- 2. Sync RECORDS (existing logic, unchanged) ---
+    const remoteRecords = await window.FirebaseSync.pullAllRecords();
+    const remoteById = new Map(remoteRecords.map(r => [String(r.id), r]));
+    const localRecords = await idbGetAllRecordsRaw();
+    const localById = new Map(localRecords.map(r => [String(r.id), r]));
+
+    for (const rr of remoteRecords) {
+        const lr = localById.get(String(rr.id));
+        if (!lr || (rr.updatedAt || 0) > (lr.updatedAt || 0)) {
+            await idbPut('records', rr);
+        }
+    }
+    for (const lr of localRecords) {
+        const rr = remoteById.get(String(lr.id));
+        if (!rr || (lr.updatedAt || 0) > (rr.updatedAt || 0)) {
+            syncPushRecord(lr);
+        }
+    }
+}
 
     // Called after a successful local unlock. Signs in to Firebase with the
     // same email/password used to unlock the vault, merges cloud data in,
@@ -624,9 +646,10 @@ async function loadProfileSettings() {
     }
 
 function setMeta(key, value) {
-        syncPushMeta(key, value);
-        return idbPut('meta', { key, value });
-    }
+    const now = Date.now();
+    syncPushMeta(key, value);
+    return idbPut('meta', { key, value, updatedAt: now });
+}
 
     function readImageAsDataURL(file) {
         return new Promise((resolve, reject) => {
