@@ -268,9 +268,19 @@
                 <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:8px 12px 4px;font-weight:600;">Other Tools</div>
 
                 <button class="nav-item" data-tab="qr" data-label="QR Generator">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="14" x2="21" y2="14"/></svg>
-                    <span>QR Generator</span>
-                </button>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="14" x2="21" y2="14"/></svg>
+    <span>QR Generator</span>
+</button>
+<button class="nav-item" data-tab="passwordGenerator" data-label="Password Generator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="4"/>
+        <line x1="8" y1="7" x2="16" y2="7"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+        <line x1="8" y1="17" x2="13" y2="17"/>
+        <circle cx="17" cy="17" r="2" fill="currentColor" stroke="none"/>
+    </svg>
+    <span>Password Generator</span>
+</button>
             </nav>
 
             <div class="sidebar-spacer"></div>
@@ -346,7 +356,7 @@
                                 <input type="password" id="fSecret" placeholder="Enter your password or PIN. Please ensure it is up to date.">
                                 <div class="in-actions">
                                     <button type="button" class="mini-icon-btn eye-toggle" data-target="fSecret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                                    <button type="button" class="mini-icon-btn" id="passwordSuggestBtn" title="Password suggestions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -365,22 +375,6 @@
                         <button class="btn btn-primary" id="vaultModalSave">Save entry</button>
                     </div>
                 </div>
-
-                <!-- Password Suggestions Modal -->
-                <div class="inline-panel" id="passwordSuggestModal">
-                    <div class="modal-head">
-                        <div><h2>Password & PIN Suggestions</h2><p>Click any password or PIN to use it.</p></div>
-                        <button class="modal-close" id="passwordSuggestClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-                    </div>
-                    <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
-                        <div class="suggest-grid" id="passwordSuggestGrid"></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button class="btn btn-ghost" id="passwordSuggestCancel">Close</button>
-                    </div>
-                </div>
-
-          
 
               <!-- VAULT LIST CONTAINER -->
                 <div id="vaultListContainer">
@@ -940,6 +934,62 @@
                 </div>
             </div>
         </section>
+
+<!-- PASSWORD GENERATOR -->
+<section class="view" id="passwordGeneratorView">
+    <div class="view-header">
+        <div>
+            <h1 class="view-title">Password Generator</h1>
+            <div class="view-sub">Generate strong passwords and PINs with ease</div>
+        </div>
+    </div>
+
+    <div class="generator-container">
+        <div class="settings-card generator-card">
+            <div class="generator-controls">
+                <!-- Type toggle -->
+                <div class="generator-type-group">
+                    <button class="gen-type-btn active" data-type="password">Password</button>
+                    <button class="gen-type-btn" data-type="pin">PIN</button>
+                </div>
+
+                <!-- Security level -->
+                <div class="generator-level-group">
+                    <button class="gen-level-btn active" data-level="low">Low</button>
+                    <button class="gen-level-btn" data-level="medium">Medium</button>
+                    <button class="gen-level-btn" data-level="high">High</button>
+                </div>
+
+                <!-- Output area -->
+                <div class="generator-output">
+                    <span id="genResult">Click Generate</span>
+                    <div class="gen-actions">
+                        <button class="btn btn-ghost btn-sm" id="genRedoBtn" title="Redo (skip)">⟳ Redo</button>
+                        <button class="btn btn-primary btn-sm" id="genTakeBtn" title="Take this value">✓ Take</button>
+                    </div>
+                </div>
+
+                <!-- Main generate button -->
+                <button class="btn btn-primary" id="genGenerateBtn" style="width:100%; justify-content:center;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Generate
+                </button>
+
+                <!-- Status info -->
+                <div class="generator-status">
+                    <span id="genUsedCount">0 used</span>
+                    <span id="genTotalCount">of 50 available</span>
+                </div>
+                <div class="generator-reset-hint">
+                    <span>All used? The list will reset automatically.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
         </main>
     </div>
