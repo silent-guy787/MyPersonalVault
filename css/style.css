@@ -2764,6 +2764,10 @@ html[data-theme="light"] .theme-card[data-theme="light"] .theme-preview {
             align-items: center;
             gap: 6px
         }
+
+.lock-pending { color: var(--ink-soft); }
+.lock-pending svg { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; }
+
         .lock-warning svg,
         .lock-success svg {
             width: 14px;
