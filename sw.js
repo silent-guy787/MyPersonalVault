@@ -9,6 +9,7 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './css/style.css',
   './js/script.js',
+  './js/firebase-sync.js',
   './manifest.json',
   './assets/images/favicon.png',
   './assets/images/icon-192.png',
