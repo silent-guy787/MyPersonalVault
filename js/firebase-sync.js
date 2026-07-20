@@ -151,11 +151,14 @@ async function pullAllRecords() {
 
 // --- Meta (salt, lockEnabled, encryptionEnabled, verifier, etc.) ------------
 
-async function pushMeta(key, value) {
-    if (!isSignedIn()) return false;
+async function pushMeta(key, value, updatedAt) {
+    if (!isSignedIn()) {
+        console.warn("[FirebaseSync] pushMeta skipped — not signed in:", key);
+        return false;
+    }
     try {
         const ref = doc(db, VAULT_ROOT, ALLOWED_UID, "meta", String(key));
-        await setDoc(ref, { key, value, updatedAt: Date.now() });
+        await setDoc(ref, { key, value, updatedAt: updatedAt || Date.now() });
         return true;
     } catch (err) {
         console.warn("[FirebaseSync] pushMeta failed:", err.message);
