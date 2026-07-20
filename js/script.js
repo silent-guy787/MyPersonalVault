@@ -504,9 +504,13 @@
 
     // Pull remote meta -> local (if remote is newer or local missing)
     for (const [key, remote] of remoteMetaMap) {
-        const local = localMetaMap.get(key);
-        if (!local || (remote.updatedAt || 0) > (local.updatedAt || 0)) {
-            await idbPut('meta', { key: remote.key, value: remote.value, updatedAt: remote.updatedAt || Date.now() });
+        try {
+            const local = localMetaMap.get(key);
+            if (!local || (remote.updatedAt || 0) > (local.updatedAt || 0)) {
+                await idbPut('meta', { key: remote.key, value: remote.value, updatedAt: remote.updatedAt || Date.now() });
+            }
+        } catch (e) {
+            console.warn('Failed to pull meta', key, e);
         }
     }
 
@@ -517,7 +521,7 @@
         const remote = remoteMetaMap.get(key);
         if (!remote || (local.updatedAt || 0) > (remote.updatedAt || 0)) {
             try {
-                await window.FirebaseSync.pushMeta(key, local.value);
+                await window.FirebaseSync.pushMeta(key, local.value, local.updatedAt);
             } catch (e) {
                 console.warn('Failed to push meta', key, e);
             }
