@@ -156,12 +156,19 @@ async function pushMeta(key, value, updatedAt) {
         console.warn("[FirebaseSync] pushMeta skipped — not signed in:", key);
         return false;
     }
+    const approxBytes = new Blob([JSON.stringify(value)]).size;
+    if (approxBytes > 900000) {
+        console.error(`[FirebaseSync] pushMeta ABORTED — "${key}" is ~${(approxBytes/1024).toFixed(0)}KB, over Firestore's 1MiB doc limit. This write will silently fail on the server.`);
+        window.dispatchEvent(new CustomEvent("firebase-sync-error", { detail: { key, reason: "too-large" } }));
+        return false;
+    }
     try {
         const ref = doc(db, VAULT_ROOT, ALLOWED_UID, "meta", String(key));
         await setDoc(ref, { key, value, updatedAt: updatedAt || Date.now() });
         return true;
     } catch (err) {
         console.warn("[FirebaseSync] pushMeta failed:", err.message);
+        window.dispatchEvent(new CustomEvent("firebase-sync-error", { detail: { key, reason: err.message } }));
         return false;
     }
 }
