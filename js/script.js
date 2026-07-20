@@ -474,9 +474,14 @@
             console.warn('Cloud delete failed', e); }
     }
 
-    async function syncPushMeta(key, value) {
-        try { if (window.FirebaseSync) await window.FirebaseSync.pushMeta(key, value); } catch (e) {
-            console.warn('Cloud meta push failed', e); }
+    async function syncPushMeta(key, value, updatedAt) {
+        try {
+            if (!window.FirebaseSync) return false;
+            return await window.FirebaseSync.pushMeta(key, value, updatedAt);
+        } catch (e) {
+            console.warn('Cloud meta push failed', e);
+            return false;
+        }
     }
 
     async function deleteRecordEverywhere(id) {
@@ -645,10 +650,14 @@ async function loadProfileSettings() {
         return rec ? rec.value : fallback;
     }
 
-function setMeta(key, value) {
+async function setMeta(key, value) {
     const now = Date.now();
-    syncPushMeta(key, value);
-    return idbPut('meta', { key, value, updatedAt: now });
+    await idbPut('meta', { key, value, updatedAt: now });
+    const pushed = await syncPushMeta(key, value, now);
+    if (!pushed && window.FirebaseSync && window.FirebaseSync.isConfigured()) {
+        updateCloudSyncStatusUI('error', 'Change not synced yet');
+    }
+    return true;
 }
 
     function readImageAsDataURL(file) {
@@ -5023,6 +5032,18 @@ function initProfileSettings() {
         setInterval(() => {
             if (!isLocked) clearExpiredTrash().then(renderTrash).catch(() => {});
         }, 60 * 60 * 1000);
+
+        setInterval(() => {
+            if (!isLocked && window.FirebaseSync && window.FirebaseSync.isSignedIn()) {
+                mergeCloudData().then(() => loadAllData()).catch(() => {});
+            }
+        }, 30 * 1000);
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && !isLocked && window.FirebaseSync && window.FirebaseSync.isSignedIn()) {
+                mergeCloudData().then(() => loadAllData()).catch(() => {});
+            }
+        });
     }
 
     boot();
