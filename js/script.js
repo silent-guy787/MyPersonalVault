@@ -2449,6 +2449,199 @@ function setMeta(key, value) {
     }
     /* ============ END OF QR UI ============ */
 
+/* ============ START OF PASSWORD GENERATOR ============ */
+const GEN_STORAGE_KEY = 'strongbox_gen_used';
+
+// Reuse the existing password lists from PASSWORD_SUGGESTIONS
+const PASSWORD_LISTS = {
+    low: PASSWORD_SUGGESTIONS.low,
+    medium: PASSWORD_SUGGESTIONS.medium,
+    high: PASSWORD_SUGGESTIONS.high
+};
+
+const PIN_LISTS = {
+    low: PASSWORD_SUGGESTIONS.pins.simple,
+    medium: PASSWORD_SUGGESTIONS.pins.medium,
+    high: PASSWORD_SUGGESTIONS.pins.high
+};
+
+let genState = {
+    type: 'password',
+    level: 'low',
+    currentValue: null,
+    used: {
+        password: { low: new Set(), medium: new Set(), high: new Set() },
+        pin: { low: new Set(), medium: new Set(), high: new Set() }
+    }
+};
+
+function loadGenUsed() {
+    try {
+        const data = JSON.parse(localStorage.getItem(GEN_STORAGE_KEY));
+        if (data) {
+            for (const type of ['password', 'pin']) {
+                for (const level of ['low', 'medium', 'high']) {
+                    if (data[type] && data[type][level]) {
+                        genState.used[type][level] = new Set(data[type][level]);
+                    }
+                }
+            }
+        }
+    } catch (_) {}
+}
+
+function saveGenUsed() {
+    const data = {
+        password: {
+            low: [...genState.used.password.low],
+            medium: [...genState.used.password.medium],
+            high: [...genState.used.password.high]
+        },
+        pin: {
+            low: [...genState.used.pin.low],
+            medium: [...genState.used.pin.medium],
+            high: [...genState.used.pin.high]
+        }
+    };
+    localStorage.setItem(GEN_STORAGE_KEY, JSON.stringify(data));
+}
+
+function initGenUsedFromVault() {
+    for (const item of vaultItems) {
+        const pwd = item.password;
+        if (pwd) {
+            for (const level of ['low', 'medium', 'high']) {
+                if (PASSWORD_LISTS[level].includes(pwd)) {
+                    genState.used.password[level].add(pwd);
+                }
+                if (PIN_LISTS[level].includes(pwd)) {
+                    genState.used.pin[level].add(pwd);
+                }
+            }
+        }
+    }
+    saveGenUsed();
+}
+
+function getGenList() {
+    if (genState.type === 'password') {
+        return PASSWORD_LISTS[genState.level] || [];
+    } else {
+        return PIN_LISTS[genState.level] || [];
+    }
+}
+
+function getUsedSet() {
+    return genState.used[genState.type][genState.level];
+}
+
+function getAvailableList() {
+    const all = getGenList();
+    const used = getUsedSet();
+    return all.filter(item => !used.has(item));
+}
+
+function resetGenCategory() {
+    const used = getUsedSet();
+    used.clear();
+    saveGenUsed();
+}
+
+function generateValue() {
+    let available = getAvailableList();
+    if (available.length === 0) {
+        resetGenCategory();
+        available = getAvailableList();
+        if (available.length === 0) {
+            const all = getGenList();
+            genState.currentValue = all[0] || 'No options';
+            updateGenUI();
+            return;
+        }
+    }
+    const randomIndex = Math.floor(Math.random() * available.length);
+    genState.currentValue = available[randomIndex];
+    updateGenUI();
+}
+
+function updateGenUI() {
+    const resultEl = document.getElementById('genResult');
+    const usedCountEl = document.getElementById('genUsedCount');
+    const totalCountEl = document.getElementById('genTotalCount');
+    if (!resultEl) return;
+    const used = getUsedSet();
+    const all = getGenList();
+    const available = all.filter(item => !used.has(item));
+    const usedCount = used.size;
+    const totalCount = all.length;
+    resultEl.textContent = genState.currentValue || 'Click Generate';
+    usedCountEl.textContent = usedCount + ' used';
+    totalCountEl.textContent = 'of ' + totalCount + ' available';
+    if (available.length === 0 && totalCount > 0) {
+        totalCountEl.textContent = 'all used — resetting...';
+    }
+}
+
+function takeValue() {
+    const value = genState.currentValue;
+    if (!value) {
+        showToast('Generate a value first', true);
+        return;
+    }
+    const used = getUsedSet();
+    if (used.has(value)) {
+        showToast('This value is already used', true);
+        return;
+    }
+    used.add(value);
+    saveGenUsed();
+    const modal = document.getElementById('vaultModalOverlay');
+    const secretInput = document.getElementById('fSecret');
+    if (modal && modal.classList.contains('open') && secretInput) {
+        secretInput.value = value;
+        showToast('Value inserted into password field');
+    } else {
+        copyToClipboard(value, 'Value copied to clipboard and marked as used');
+    }
+    generateValue();
+}
+
+function redoValue() {
+    generateValue();
+}
+
+function initPasswordGenerator() {
+    loadGenUsed();
+    initGenUsedFromVault();
+
+    document.querySelectorAll('.gen-type-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.gen-type-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            genState.type = this.dataset.type;
+            genState.currentValue = null;
+            updateGenUI();
+        });
+    });
+
+    document.querySelectorAll('.gen-level-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.gen-level-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            genState.level = this.dataset.level;
+            genState.currentValue = null;
+            updateGenUI();
+        });
+    });
+
+    document.getElementById('genGenerateBtn').addEventListener('click', generateValue);
+    document.getElementById('genRedoBtn').addEventListener('click', redoValue);
+    document.getElementById('genTakeBtn').addEventListener('click', takeValue);
+
+    updateGenUI();
+}
+/* ============ END OF PASSWORD GENERATOR ============ */
+
     /* ============ START OF MODALS ============ */
     function openModal(overlayId) { $(overlayId).classList.add('open');
         $(overlayId).scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
@@ -3448,6 +3641,7 @@ function setMeta(key, value) {
             }
             cryptoKey = key;
             await loadAllData();
+            initGenUsedFromVault();
             renderEverything();
             hideLockScreen();
             showToast('Unlocked');
@@ -3952,38 +4146,6 @@ function setMeta(key, value) {
             $('newVaultBtn').onclick = () => openCardModal(null);
         }
 
-        $('passwordSuggestBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            usedPasswords.clear();
-            vaultItems.forEach(item => {
-                if (item.password && item.password.trim()) {
-                    usedPasswords.add(item.password.trim());
-                }
-            });
-            renderPasswordSuggestions();
-            openModal('passwordSuggestModal');
-        });
-
-        $('passwordSuggestClose').addEventListener('click', () => closeModal('passwordSuggestModal'));
-        $('passwordSuggestCancel').addEventListener('click', () => closeModal('passwordSuggestModal'));
-        $('passwordSuggestModal').addEventListener('click', e => {
-            if (e.target.id === 'passwordSuggestModal') closeModal('passwordSuggestModal');
-        });
-
-        $('passwordSuggestGrid').addEventListener('click', function(e) {
-            const item = e.target.closest('.suggest-item');
-            if (!item) return;
-            const value = item.dataset.value;
-            if (value) {
-                const input = $('fSecret');
-                input.value = value;
-                usedPasswords.add(value);
-                closeModal('passwordSuggestModal');
-                input.dispatchEvent(new Event('input'));
-                showToast('Password selected');
-            }
-        });
-
         $('qrTextInput').addEventListener('input', generateQRCode);
 
         document.querySelectorAll('#qrFgColors .qr-color-swatch').forEach(btn => {
@@ -4438,8 +4600,9 @@ function initProfileSettings() {
         initSidebarCollapse();
         initMobileSidebar();
         initMobileNotepadTabs();
-       initEventListeners();
+        initEventListeners();
         initProfileSettings();
+        initPasswordGenerator();
 
         try {
             db = await openDB();
@@ -4451,6 +4614,7 @@ function initProfileSettings() {
 
             if (!lockEnabled) {
                 await loadAllData();
+                initGenUsedFromVault();
             }
         } catch (err) {
             console.error('Failed to initialize database:', err);
