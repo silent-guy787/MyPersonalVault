@@ -35,12 +35,6 @@ import {
    project to talk to. Real access control happens in Firestore Security
    Rules (step 5 of the guide) and in ALLOWED_UID below.
 ============================================================================ */
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAFUuJzhKrOStoz_piErZnnwybLGt2-wjE",
   authDomain: "strongbox-vault-f5515.firebaseapp.com",
