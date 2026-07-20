@@ -3907,12 +3907,13 @@ function initPasswordGenerator() {
         const dormant = !lockEnabled && !!saltB64;
         $('lockToggle').checked = lockEnabled;
         $('lockStateWord').textContent = lockEnabled ? 'on' : (dormant ? 'off (password saved)' : 'off');
-       $('lockSetSection').style.display = (lockEnabled || saltB64) ? 'none' : ($('lockToggle').dataset
-            .pendingOn === '1' ? 'flex' : 'none');
-        if ($('cloudRestoreSection')) {
-            $('cloudRestoreSection').style.display = (lockEnabled || saltB64) ? 'none' : ($('lockToggle')
-                .dataset.pendingOn === '1' ? 'block' : 'none');
-        }
+       // Show the "set password" form only when the toggle is switched on and no lock exists
+$('lockSetSection').style.display = (lockEnabled || saltB64) ? 'none' : ($('lockToggle').dataset.pendingOn === '1' ? 'flex' : 'none');
+
+// Always show the Cloud Restore section when no lock is set (regardless of toggle state)
+if ($('cloudRestoreSection')) {
+    $('cloudRestoreSection').style.display = (lockEnabled || saltB64) ? 'none' : 'block';
+}
         $('lockManageSection').style.display = (lockEnabled || dormant) ? 'block' : 'none';
         $('openChangePassBtn').style.display = lockEnabled ? 'inline-flex' : 'none';
         $('openResetLockBtn').style.display = (lockEnabled || dormant) ? 'inline-flex' : 'none';
