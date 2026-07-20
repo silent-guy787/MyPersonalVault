@@ -12,6 +12,11 @@
     /* ============ START OF STATE ============ */
     let db = null;
     let cryptoKey = null;
+    // Kept in memory only (never written to disk) so the "Sync now" button in
+    // Settings can re-authenticate to Firebase without asking again. Cleared
+    // whenever the vault locks.
+    let lastUnlockEmail = null;
+    let lastUnlockPassword = null;
     let saltB64 = null;
     let lockEnabled = false;
     let encryptionEnabled = false;
@@ -408,7 +413,137 @@
             } catch (err) { reject(err); }
         });
     }
+
+    function idbGetAllRecordsRaw() {
+        return new Promise((resolve, reject) => {
+            try {
+                const req = tx('records', 'readonly').getAll();
+                req.onsuccess = () => resolve(req.result || []);
+                req.onerror = () => reject(req.error);
+            } catch (err) { reject(err); }
+        });
+    }
     /* ============ END OF INDEXEDDB ============ */
+
+    /* ============ START OF CLOUD SYNC ============ */
+    // script.js never talks to Firebase directly — it only calls the methods
+    // exposed on window.FirebaseSync by js/firebase-sync.js, and only ever
+    // hands it already-encrypted records (iv/cipher) or non-secret meta.
+    let cloudSyncing = false;
+
+    function waitForFirebaseSyncReady(timeoutMs) {
+        return new Promise((resolve) => {
+            if (window.FirebaseSync) return resolve(true);
+            let done = false;
+            const finish = (ok) => { if (done) return;
+                done = true;
+                window.removeEventListener('firebase-sync-ready', onReady);
+                resolve(ok); };
+            const onReady = () => finish(!!window.FirebaseSync);
+            window.addEventListener('firebase-sync-ready', onReady);
+            setTimeout(() => finish(!!window.FirebaseSync), timeoutMs || 4000);
+        });
+    }
+
+    function updateCloudSyncStatusUI(state, detail) {
+        const pill = document.getElementById('cloudSyncStatusPill');
+        if (!pill) return;
+        if (state === 'synced') {
+            pill.className = 'status-pill on';
+            pill.textContent = 'Synced';
+        } else if (state === 'error') {
+            pill.className = 'status-pill off';
+            pill.textContent = detail || 'Sync unavailable';
+        } else if (state === 'syncing') {
+            pill.className = 'status-pill';
+            pill.textContent = 'Syncing…';
+        } else {
+            pill.className = 'status-pill off';
+            pill.textContent = 'Not signed in';
+        }
+    }
+
+    async function syncPushRecord(rec) {
+        try { if (window.FirebaseSync) await window.FirebaseSync.pushRecord(rec); } catch (e) {
+            console.warn('Cloud push failed', e); }
+    }
+
+    async function syncDeleteRecord(id) {
+        try { if (window.FirebaseSync) await window.FirebaseSync.deleteRecordRemote(id); } catch (e) {
+            console.warn('Cloud delete failed', e); }
+    }
+
+    async function syncPushMeta(key, value) {
+        try { if (window.FirebaseSync) await window.FirebaseSync.pushMeta(key, value); } catch (e) {
+            console.warn('Cloud meta push failed', e); }
+    }
+
+    async function deleteRecordEverywhere(id) {
+        await idbDelete('records', id);
+        syncDeleteRecord(id);
+    }
+
+    // Pulls remote records/meta, merges with local by updatedAt (last write
+    // wins), pushes anything local-only or newer back up, then reloads the
+    // in-memory vault from IndexedDB so the UI reflects the merged result.
+    async function mergeCloudData() {
+        if (!window.FirebaseSync || !window.FirebaseSync.isSignedIn()) return;
+
+        const remoteMetaList = await window.FirebaseSync.pullAllMeta();
+        for (const m of remoteMetaList) {
+            const localRec = await idbGet('meta', m.key);
+            if (!localRec) {
+                await idbPut('meta', { key: m.key, value: m.value });
+            }
+        }
+
+        const remoteRecords = await window.FirebaseSync.pullAllRecords();
+        const remoteById = new Map(remoteRecords.map(r => [String(r.id), r]));
+        const localRecords = await idbGetAllRecordsRaw();
+        const localById = new Map(localRecords.map(r => [String(r.id), r]));
+
+        for (const rr of remoteRecords) {
+            const lr = localById.get(String(rr.id));
+            if (!lr || (rr.updatedAt || 0) > (lr.updatedAt || 0)) {
+                await idbPut('records', rr);
+            }
+        }
+        for (const lr of localRecords) {
+            const rr = remoteById.get(String(lr.id));
+            if (!rr || (lr.updatedAt || 0) > (rr.updatedAt || 0)) {
+                syncPushRecord(lr);
+            }
+        }
+    }
+
+    // Called after a successful local unlock. Signs in to Firebase with the
+    // same email/password used to unlock the vault, merges cloud data in,
+    // and reloads the UI. Any failure (offline, misconfigured, wrong cloud
+    // account) is swallowed — the local vault keeps working regardless.
+    async function performCloudSync(email, password) {
+        if (cloudSyncing) return;
+        cloudSyncing = true;
+        updateCloudSyncStatusUI('syncing');
+        try {
+            const fbReady = await waitForFirebaseSyncReady();
+            if (!fbReady || !window.FirebaseSync.isConfigured()) {
+                updateCloudSyncStatusUI('idle');
+                return;
+            }
+            await window.FirebaseSync.signIn(email, password);
+            await mergeCloudData();
+            await loadAllData();
+            initGenUsedFromVault();
+            renderEverything();
+            updateCloudSyncStatusUI('synced');
+        } catch (err) {
+            console.warn('Cloud sync skipped:', err.message);
+            updateCloudSyncStatusUI('error', err.message);
+        } finally {
+            cloudSyncing = false;
+        }
+    }
+    /* ============ END OF CLOUD SYNC ============ */
 
     /* ============ START OF RECORD SAVE/LOAD ============ */
     async function writeRecord(storeType, item, extra) {
@@ -422,7 +557,9 @@
             rec.data = item;
             rec.plain = true;
         }
+        rec.updatedAt = Date.now();
         await idbPut('records', rec);
+        syncPushRecord(rec);
         return rec;
     }
 
@@ -486,6 +623,7 @@ async function loadProfileSettings() {
     }
 
 function setMeta(key, value) {
+        syncPushMeta(key, value);
         return idbPut('meta', { key, value });
     }
 
@@ -993,7 +1131,7 @@ function setMeta(key, value) {
         const expired = trashItems.filter(t => t.expiresAt && t.expiresAt < now);
         if (expired.length === 0) return;
         trashItems = trashItems.filter(t => !t.expiresAt || t.expiresAt >= now);
-        await Promise.all(expired.map(t => idbDelete('records', t.id)));
+        await Promise.all(expired.map(t => deleteRecordEverywhere(t.id)));
     }
 
     async function moveToTrash(item, type) {
@@ -1005,7 +1143,7 @@ function setMeta(key, value) {
             expiresAt: Date.now() + TRASH_EXPIRY_MS
         };
         trashItems.push(trashEntry);
-        await idbDelete('records', item.id);
+        await deleteRecordEverywhere(item.id);
         await writeRecord('trash', trashEntry, { expiresAt: trashEntry.expiresAt, deletedAt: trashEntry
                 .deletedAt });
     }
@@ -1015,7 +1153,7 @@ function setMeta(key, value) {
         if (idx === -1) throw new Error('Not in trash');
         const entry = trashItems[idx];
         trashItems.splice(idx, 1);
-        await idbDelete('records', entry.id);
+        await deleteRecordEverywhere(entry.id);
         const data = entry.data;
         if (entry.type === 'vault') { vaultItems.push(data);
             await writeRecord('vault', data); } else if (entry.type === 'goals') { goalItems.push(data);
@@ -1027,13 +1165,13 @@ function setMeta(key, value) {
 
     async function permanentlyDeleteTrash(id) {
         trashItems = trashItems.filter(t => t.id !== id);
-        await idbDelete('records', id);
+        await deleteRecordEverywhere(id);
     }
 
     async function emptyTrash() {
         const ids = trashItems.map(t => t.id);
         trashItems = [];
-        await Promise.all(ids.map(id => idbDelete('records', id)));
+        await Promise.all(ids.map(id => deleteRecordEverywhere(id)));
     }
     /* ============ END OF TRASH ============ */
 
@@ -3634,6 +3772,9 @@ function initPasswordGenerator() {
     /* ============ START OF LOCK SCREEN ============ */
     function showLockScreen(forInitialSetup) {
         isLocked = true;
+        lastUnlockEmail = null;
+        lastUnlockPassword = null;
+        if (window.FirebaseSync) window.FirebaseSync.signOut();
         $('app').classList.remove('unlocked');
         $('app').classList.add('locked');
         $('lockScreen').classList.add('visible');
@@ -3704,11 +3845,14 @@ function initPasswordGenerator() {
                 return;
             }
             cryptoKey = key;
+            lastUnlockEmail = email;
+            lastUnlockPassword = pass;
             await loadAllData();
             initGenUsedFromVault();
             renderEverything();
             hideLockScreen();
             showToast('Unlocked');
+            performCloudSync(email, pass);
         } catch (err) {
             console.error(err);
             errEl.textContent = 'Something went wrong while unlocking. Please try again.';
@@ -3998,6 +4142,21 @@ function initPasswordGenerator() {
         });
         $('cancelResetLockBtn').addEventListener('click', () => { $('resetLockForm').style.display =
                 'none'; });
+
+        const cloudSyncBtn = $('cloudSyncNowBtn');
+        if (cloudSyncBtn) {
+            cloudSyncBtn.addEventListener('click', async function() {
+                if (!cryptoKey) { showToast('Unlock the vault first', true); return; }
+                if (!window.FirebaseSync || !window.FirebaseSync.isConfigured()) {
+                    showToast('Cloud sync is not configured yet', true);
+                    return;
+                }
+                this.disabled = true;
+                await performCloudSync(lastUnlockEmail, lastUnlockPassword);
+                this.disabled = false;
+            });
+        }
+        updateCloudSyncStatusUI(window.FirebaseSync && window.FirebaseSync.isSignedIn() ? 'synced' : 'idle');
 
         $('backupDataBtn').addEventListener('click', async function() {
             try {
