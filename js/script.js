@@ -817,42 +817,42 @@ function setMeta(key, value) {
     }
     
     function renderVaultRowHTML(item, secretId) {
-        const initial = (item.name || '?').trim().charAt(0).toUpperCase() || '?';
-        const hostname = getVaultHostname(item);
-        const iconHTML = hostname ?
-            '<img src="https://icons.duckduckgo.com/ip3/' + escapeAttr(hostname) + '.ico" alt="" ' +
-            'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
-            '<span class="entry-row-icon-fallback" style="display:none;">' + escapeHTML(initial) + '</span>' :
-            '<span class="entry-row-icon-fallback" style="display:flex;">' + escapeHTML(initial) + '</span>';
-        return '<div class="entry-card entry-row" data-id="' + item.id + '">' +
-            '<div class="entry-row-icon">' + iconHTML + '</div>' +
-            '<div class="entry-row-main">' +
-            '<div class="entry-row-name">' + escapeHTML(item.name) +
-            (isURL(item.name) ? ' <button class="open-link-btn" title="Open link" data-url="' + escapeAttr(
-                extractURL(item.name)) +
-            '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>' :
-                '') +
-            '</div>' +
-            (item.username ? '<div class="entry-row-user">' + escapeHTML(item.username) + '</div>' : '') +
-            '</div>' +
-            '<div class="entry-row-side">' +
-            (item.category ? '<span class="goal-category-tag">' + escapeHTML(item.category) + '</span>' : '') +
-            '<div class="field-value secret entry-row-secret">' +
-            '<span id="' + secretId + '" data-secret="' + escapeAttr(item.password || '') + '">' + '•'.repeat(
-                Math.min(item.password ? item.password.length : 8, 14)) + '</span>' +
-            '<button class="mini-icon-btn reveal-btn" data-target="' + secretId +
-            '" title="Show/hide">' + iconEye() + '</button>' +
-            '<button class="mini-icon-btn copy-btn" data-copy="' + escapeAttr(item.password || '') +
-            '" title="Copy">' + iconCopy() + '</button>' +
-            '</div>' +
-            '</div>' +
-            '<div class="entry-menu entry-row-actions">' +
-            '<button class="icon-btn edit-vault" title="Edit">' + iconEdit() + '</button>' +
-            '<button class="icon-btn danger delete-vault" title="Move to trash">' + iconTrash() +
-            '</button>' +
-            '</div>' +
-            '</div>';
-    }
+    const initial = (item.name || '?').trim().charAt(0).toUpperCase() || '?';
+    const hostname = getVaultHostname(item);
+    const iconHTML = hostname ?
+        '<img src="https://icons.duckduckgo.com/ip3/' + escapeAttr(hostname) + '.ico" alt="" ' +
+        'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+        '<span class="entry-row-icon-fallback" style="display:none;">' + escapeHTML(initial) + '</span>' :
+        '<span class="entry-row-icon-fallback" style="display:flex;">' + escapeHTML(initial) + '</span>';
+    return '<div class="entry-card entry-row" data-id="' + item.id + '">' +
+        '<div class="entry-row-icon">' + iconHTML + '</div>' +
+        '<div class="entry-row-main">' +
+        '<div class="entry-row-name">' + escapeHTML(item.name) +
+        (isURL(item.name) ? ' <button class="open-link-btn" title="Open link" data-url="' + escapeAttr(
+            extractURL(item.name)) +
+        '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>' :
+            '') +
+        (item.category ? ' <span class="goal-category-tag">' + escapeHTML(item.category) + '</span>' : '') +
+        '</div>' +
+        (item.username ? '<div class="entry-row-user">' + escapeHTML(item.username) + '</div>' : '') +
+        '</div>' +
+        '<div class="entry-row-side">' +
+        '<div class="field-value secret entry-row-secret">' +
+        '<span id="' + secretId + '" data-secret="' + escapeAttr(item.password || '') + '">' + '•'.repeat(
+            Math.min(item.password ? item.password.length : 8, 14)) + '</span>' +
+        '<button class="mini-icon-btn reveal-btn" data-target="' + secretId +
+        '" title="Show/hide">' + iconEye() + '</button>' +
+        '<button class="mini-icon-btn copy-btn" data-copy="' + escapeAttr(item.password || '') +
+        '" title="Copy">' + iconCopy() + '</button>' +
+        '</div>' +
+        '</div>' +
+        '<div class="entry-menu entry-row-actions">' +
+        '<button class="icon-btn edit-vault" title="Edit">' + iconEdit() + '</button>' +
+        '<button class="icon-btn danger delete-vault" title="Move to trash">' + iconTrash() +
+        '</button>' +
+        '</div>' +
+        '</div>';
+}
 
     function iconEdit() {
         return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
