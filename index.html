@@ -59,7 +59,7 @@
     <div class="lock-label-login" id="lockScreenLabel">Sign in to your vault</div>
 
                 <div class="lock-input-group">
-    <div class="lock-input-wrap">
+    <div class="lock-input-wrap" id="lockEmailWrap">
         <div class="lock-input-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M4 10h16"/><path d="M8 14h3"/></svg>
         </div>
@@ -669,6 +669,7 @@
 </div>
                     <div id="lockSetSection" style="display:none;" class="inline-form">
                         <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Set your PIN or password</div>
+                        <p class="settings-desc" style="margin:0 0 8px;">This creates a <strong>device-only</strong> lock. Your data stays encrypted in this browser's storage and is <strong>not</strong> synced to the cloud. If you want this device to sync with a vault from another device instead, use "Restore from Cloud" below.</p>
                         <div class="form-group mono">
                             <label>New password / PIN</label>
                             <div class="input-with-btn">
@@ -685,6 +686,24 @@
                         </div>
                         <div id="lockPasswordFeedback"></div>
                         <div class="settings-actions"><button class="btn btn-primary btn-sm" id="lockSavePasswordBtn">Save &amp; enable</button></div>
+                    </div>
+
+                    <div id="cloudRestoreSection" style="display:none;" class="inline-form">
+                        <div class="inline-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10Z"/></svg>Restore from Cloud</div>
+                        <p class="settings-desc" style="margin:0 0 8px;">Already have a Strongbox vault synced from another device? Sign in with your Firebase email and password to pull that data down <em>before</em> creating a lock on this device.</p>
+                        <div class="form-group mono">
+                            <label>Email address</label>
+                            <input type="email" id="cloudRestoreEmail" autocomplete="email">
+                        </div>
+                        <div class="form-group mono">
+                            <label>Password</label>
+                            <div class="input-with-btn">
+                                <input type="password" id="cloudRestorePassword" autocomplete="current-password">
+                                <div class="in-actions"><button type="button" class="mini-icon-btn eye-toggle" data-target="cloudRestorePassword"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                            </div>
+                        </div>
+                        <div id="cloudRestoreFeedback"></div>
+                        <div class="settings-actions"><button class="btn btn-secondary btn-sm" id="cloudRestoreBtn">Restore &amp; continue</button></div>
                     </div>
 
                     <div id="lockManageSection" style="display:none;">
