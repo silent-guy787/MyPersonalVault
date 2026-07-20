@@ -4127,11 +4127,41 @@ if ($('cloudRestoreSection')) {
 
                 const remoteMeta = await window.FirebaseSync.pullAllMeta();
                 if (!remoteMeta.some(m => m.key === 'salt')) {
-                    feedback(fb, false, 'No cloud vault found for this account.');
-                    await window.FirebaseSync.signOut();
-                    this.disabled = false;
-                    return;
-                }
+    // No existing vault – ask if user wants to create one
+    const create = confirm(
+        'No existing vault found for this account.\n\n' +
+        'Would you like to create a new cloud vault on this device?\n' +
+        'If you choose "Cancel", you can still use the app locally without cloud sync.'
+    );
+    if (!create) {
+        feedback(fb, false, 'Cloud sync not enabled.');
+        await window.FirebaseSync.signOut();
+        this.disabled = false;
+        return;
+    }
+    // Generate a brand new salt and verifier for this account
+    const newSalt = randomSaltB64();
+    const newKey = await deriveKey(pass, newSalt);
+    const { iv, cipher } = await makeVerifier(newKey);
+    cryptoKey = newKey;
+    saltB64 = newSalt;
+    encryptionEnabled = true;
+    lockEnabled = true;
+    syncMode = 'cloud';
+    // Push the new meta to Firebase
+    await window.FirebaseSync.pushMeta('salt', newSalt);
+    await window.FirebaseSync.pushMeta('verifierIv', iv);
+    await window.FirebaseSync.pushMeta('verifierCipher', cipher);
+    await window.FirebaseSync.pushMeta('lockEnabled', true);
+    await window.FirebaseSync.pushMeta('encryptionEnabled', true);
+    await window.FirebaseSync.pushMeta('syncMode', 'cloud');
+    // Also re‑encrypt any existing local records (they will be empty)
+    await reencryptAllData();
+    feedback(fb, true, 'New cloud vault created! Reloading…');
+    showToast('Cloud vault created – sign in to continue');
+    setTimeout(() => location.reload(), 900);
+    return;
+}
                 // Write remote meta down exactly as-is — no new salt/verifier
                 // is generated locally, so the derived key matches the
                 // account's original device.
